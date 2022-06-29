@@ -69,7 +69,7 @@ function EmailPassword({ isNew }) {
       <div>
         <Button
           onClick={(e) => handleUserAuth(e)}
-          text={"Sign up"}
+          text={"Sign" + (isNew ? " up" : " in")}
           style={"w-full"}
           accent={true}
           loading={loading}

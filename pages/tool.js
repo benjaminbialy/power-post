@@ -2,8 +2,23 @@ import axios from "axios";
 import { useId, useState } from "react";
 import NumberInput from "../components/Inputs/NumberInput";
 import LinkButton from "../components/LinkButton";
+import { supabase } from "../utils/supabaseClient";
 
-export default function Tool() {
+// used to implement a protected route
+export async function getServerSideProps({ req }) {
+  const { user } = await supabase.auth.api.getUserByCookie(req);
+
+  // redirect to login page if not logged in
+  if (!user) {
+    return {
+      redirect: { destination: "/", permanent: false },
+    };
+  }
+
+  return { props: { user } };
+}
+
+export default function Tool({ user }) {
   const [prompt, setPrompt] = useState(
     "Only show me the keywords of this text: "
   );
