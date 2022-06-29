@@ -1,19 +1,15 @@
 import React, { useState } from "react";
 import Button from "./Button";
 import EmailPassword from "./EmailPassword";
+import { supabase } from "../utils/supabaseClient";
 
 export default function Auth() {
   const [isNew, setIsNew] = useState(true);
 
-  async function signInWithApple() {
+  // for Google and Apple auth
+  async function signInWithOAuth(provider) {
     const { user, session, error } = await supabase.auth.signIn({
-      provider: "apple",
-    });
-  }
-
-  async function signInWithGoogle() {
-    const { user, session, error } = await supabase.auth.signIn({
-      provider: "google",
+      provider: provider,
     });
   }
 

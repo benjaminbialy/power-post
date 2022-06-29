@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
+import Button from "./Button";
+import LinkButton from "./LinkButton";
 
 export default function Account({ session }) {
   const [loading, setLoading] = useState(true);
@@ -42,7 +44,6 @@ export default function Account({ session }) {
     try {
       setLoading(true);
       const user = supabase.auth.user();
-
       const updates = {
         id: user.id,
         username,
@@ -50,11 +51,9 @@ export default function Account({ session }) {
         avatar_url,
         updated_at: new Date(),
       };
-
       let { error } = await supabase.from("profiles").upsert(updates, {
         returning: "minimal", // Don't return the value after inserting
       });
-
       if (error) {
         throw error;
       }
@@ -68,11 +67,11 @@ export default function Account({ session }) {
   return (
     <div className="bg-white w-2/5">
       <div>
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">Email: </label>
         <input id="email" type="text" value={session.user.email} disabled />
       </div>
       <div>
-        <label htmlFor="username">Name</label>
+        <label htmlFor="username">Name: </label>
         <input
           id="username"
           type="text"
@@ -81,7 +80,7 @@ export default function Account({ session }) {
         />
       </div>
       <div>
-        <label htmlFor="website">Website</label>
+        <label htmlFor="website">Website: </label>
         <input
           id="website"
           type="website"
@@ -100,11 +99,12 @@ export default function Account({ session }) {
         </button>
       </div>
 
-      <div>
-        <button className="" onClick={() => supabase.auth.signOut()}>
-          Sign Out
-        </button>
-      </div>
+      <Button
+        text={"Sign out"}
+        onClick={() => supabase.auth.signOut()}
+        accent={true}
+      />
+      <LinkButton href={"/tool"} text={"Generate content"} />
     </div>
   );
 }
