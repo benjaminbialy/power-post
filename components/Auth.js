@@ -1,50 +1,55 @@
-import { useState } from "react";
-import { supabase } from "../utils/supabaseClient";
+import React, { useState } from "react";
+import Button from "./Button";
+import EmailPassword from "./EmailPassword";
 
 export default function Auth() {
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
+  const [isNew, setIsNew] = useState(true);
 
-  const handleLogin = async (email) => {
-    try {
-      setLoading(true);
-      const { error } = await supabase.auth.signIn({ email });
-      if (error) throw error;
-      alert("Check your email for the login link!");
-    } catch (error) {
-      alert(error.error_description || error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  async function signInWithApple() {
+    const { user, session, error } = await supabase.auth.signIn({
+      provider: "apple",
+    });
+  }
+
+  async function signInWithGoogle() {
+    const { user, session, error } = await supabase.auth.signIn({
+      provider: "google",
+    });
+  }
 
   return (
-    <div className="row flex flex-center">
-      <div className="col-6 form-widget">
-        <h1 className="header">Supabase + Next.js</h1>
-        <p className="description">
-          Sign in via magic link with your email below
-        </p>
-        <div>
-          <input
-            className="inputField"
-            type="email"
-            placeholder="Your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              handleLogin(email);
-            }}
-            className="button block"
-            disabled={loading}
-          >
-            <span>{loading ? "Loading" : "Send magic link"}</span>
-          </button>
+    <div className="flex min- overflow-hidden bg-white w-2/5">
+      <div className="flex flex-col justify-center flex-1 px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+        <Button
+          text={"Sign " + (isNew ? "in" : "up")}
+          onClick={() => setIsNew((prev) => !prev)}
+        />
+        <div className="w-full max-w-xl mx-auto lg:w-96">
+          <div>
+            <h2 className="mt-6 text-3xl font-extrabold text-neutral-600">
+              Sign {isNew ? "up" : "in"}
+            </h2>
+          </div>
+          <div className="mt-14">
+            <form className="space-y-6">
+              <EmailPassword isNew={isNew} />
+              <div className="relative my-4">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-neutral-600">
+                    {" "}
+                    Or continue with{" "}
+                  </span>
+                </div>
+              </div>
+            </form>
+            <div>
+              <Button text={"Google"} style={"w-full mt-2"} />
+              <Button text={"Apple"} style={"w-full mt-2"} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
