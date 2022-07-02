@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import Button from "./Button";
+import Button from "./Buttons/Button";
 import { supabase } from "../utils/supabaseClient.js";
 import TextInput from "./inputs/TextInput";
 
+// sign in/up form with email and password
 function EmailPassword({ isNew }) {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");

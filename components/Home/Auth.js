@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Button from "./Button";
-import EmailPassword from "./EmailPassword";
-import { supabase } from "../utils/supabaseClient";
+import Button from "../Buttons/Button";
+import EmailPassword from "../EmailPassword";
+import { supabase } from "../../utils/supabaseClient";
 
 export default function Auth() {
   const [isNew, setIsNew] = useState(true);

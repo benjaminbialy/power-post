@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient.js";
-import Auth from "../components/Auth";
-import Account from "../components/Account";
+import Auth from "../components/Home/Auth";
+import Account from "../components/Home/Account";
 
 export default function Home() {
   const [session, setSession] = useState(null);
 
   useEffect(() => {
     setSession(supabase.auth.session());
+    console.log(supabase.auth.session());
 
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
@@ -15,7 +16,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex justify-center bg-neutral-700 pt-12 pb-24 min-h-screen w-screen">
+    <div className="flex justify-center min-h-screen w-screen">
       {!session ? (
         <Auth />
       ) : (
