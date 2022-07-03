@@ -73,17 +73,21 @@ export default function Account({ session }) {
           accent={true}
         />
         <LinkButton href={"/write"} text={"Write"} />
+        <LinkButton href={"/post"} text={"Post"} />
       </div>
-      <ScrollContainer>
-        {posts.map((post) => (
-          <Post
-            key={post.post_id}
-            name={post.name}
-            content={post.content}
-            picURL={post.pic_url}
-          />
-        ))}
-      </ScrollContainer>
+      <div>
+        <ScrollContainer>
+          <h2>Posts</h2>
+          {posts.map((post) => (
+            <Post
+              key={post.post_id}
+              name={post.name}
+              content={post.content}
+              picURL={post.pic_url}
+            />
+          ))}
+        </ScrollContainer>{" "}
+      </div>
     </div>
   );
 }

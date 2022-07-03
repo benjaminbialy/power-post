@@ -19,20 +19,27 @@ export async function getServerSideProps({ req }) {
 
   return { props: { user } };
 }
+
+const findQueuedPost = (posts, post_id) => {
+  return posts.find((obj) => obj.post_id === post_id);
+};
+
 export default function post({ user }) {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
+  const [queuedPosts, setQueuedPosts] = useState([]);
 
   useEffect(() => {
-    getPosts();
+    setLoading(true);
+    getPosts("posts", setPosts);
+    getPosts("queued_posts", setQueuedPosts);
+    setLoading(false);
   }, [user]);
 
-  const getPosts = async () => {
+  const getPosts = async (table, setType) => {
     try {
-      setLoading(true);
-
       let { data, error, status } = await supabase
-        .from("posts")
+        .from(table)
         .select()
         .eq("user_id", user.id)
         .limit(10)
@@ -42,59 +49,91 @@ export default function post({ user }) {
         throw error;
       }
       if (data) {
-        setPosts([...data]);
+        setType([...data]);
       }
     } catch (error) {
-      alert(error.message);
-    } finally {
-      setLoading(false);
+      console.error(error.message);
     }
   };
 
-  const queuePost = () => {};
-
-  async function updateProfile({ username, website, avatar_url }) {
-    try {
-      setLoading(true);
-      const user = supabase.auth.user();
-      const updates = {
-        id: user.id,
-        username,
-        website,
-        avatar_url,
-        updated_at: new Date(),
-      };
-      let { error } = await supabase.from("profiles").upsert(updates, {
-        returning: "minimal", // Don't return the value after inserting
-      });
-      if (error) {
-        throw error;
-      }
-    } catch (error) {
-      alert(error.message);
-    } finally {
-      setLoading(false);
+  const queuePost = async (post_id, user_id) => {
+    let today = new Date();
+    const { data, error } = await supabase.from("queued_posts").insert([
+      {
+        user_id: user_id,
+        post_id: post_id,
+        // the date tomorrow
+        date_to_post: new Date(today.setDate(today.getDate() + 1)),
+      },
+    ]);
+    if (error) {
+      console.log(error);
+    } else {
+      // add queued post to state after it's added to DB
+      setQueuedPosts((prev) => [...prev, data[0]]);
     }
-  }
+  };
+
+  const unqueuePost = async (post_id) => {
+    const { data, error } = await supabase
+      .from("queued_posts")
+      .delete()
+      .match({ post_id: post_id });
+    if (error) {
+      console.log(error);
+    } else {
+      // remove the queued post from state after it is from DB
+      let queuedPostsCopy = [...queuedPosts];
+      queuedPostsCopy.splice(
+        queuedPostsCopy.findIndex((el) => el.post_id === post_id),
+        1
+      );
+      setQueuedPosts([...queuedPostsCopy]);
+    }
+  };
 
   return (
-    <div className="flex flex-col w-screen items-center ">
+    <div className="flex flex-col w-screen overflow-hidden p-20 justify-center items-center ">
       <div className="flex w-full">
         {" "}
         <LinkButton href={"/"} text={"Home"} />
       </div>
-      <ScrollContainer>
-        {posts.map((post) => (
-          <Post
-            onClick={queuePost}
-            post={true}
-            key={post.post_id}
-            name={post.name}
-            content={post.content}
-            picURL={post.pic_url}
-          />
-        ))}
-      </ScrollContainer>
+
+      <div>
+        <h2>Posts</h2>{" "}
+        <ScrollContainer>
+          {posts.map((post) => (
+            <Post
+              onClick={() => queuePost(post.post_id, user.id)}
+              key={"normal-" + post.post_id}
+              name={post.name}
+              content={post.content}
+              picURL={post.pic_url}
+              showButton={true}
+            />
+          ))}
+        </ScrollContainer>
+      </div>
+      <div>
+        <h2>Queued Posts</h2>{" "}
+        <ScrollContainer>
+          {queuedPosts.map((queued) => {
+            let queuedPost = { ...findQueuedPost(posts, queued.post_id) };
+            console.log(queuedPost);
+            return (
+              <Post
+                buttonText="Unqueue"
+                onClick={() => unqueuePost(queued.post_id)}
+                key={"queued-" + queued.queue_id}
+                name={queuedPost.name}
+                content={queuedPost.content}
+                picURL={queuedPost.pic_url}
+                showButton={true}
+              />
+            );
+          })}
+        </ScrollContainer>
+      </div>
     </div>
   );
 }
