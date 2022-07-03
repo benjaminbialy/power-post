@@ -1,5 +1,6 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { useEffect } from "react";
 
 const TiptapEditor = ({ content, setContent, editable = true }) => {
   const editor = useEditor({
@@ -11,6 +12,10 @@ const TiptapEditor = ({ content, setContent, editable = true }) => {
     content: content,
     editable: editable,
   });
+
+  useEffect(() => {
+    editor?.commands?.setContent(content);
+  }, [content]);
 
   if (!editor) {
     return null;

@@ -114,6 +114,10 @@ function write({ user, templateSelected = 0 }) {
     console.log(postTypeID);
   }, [postTypeID]);
 
+  useEffect(() => {
+    console.log(content);
+  }, [content]);
+
   return (
     <div className="w-screen min-h-screen flex ">
       <div className="bg-slate-50 w-1/2">
