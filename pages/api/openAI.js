@@ -14,6 +14,7 @@ export default async function (req, res) {
     frequency_penalty,
     presence_penalty,
   } = req.body;
+  console.log(req);
 
   const completion = await openai.createCompletion({
     model: "text-davinci-002",

@@ -13,7 +13,6 @@ export default function Home() {
 
     supabase.auth.onAuthStateChange(async (event, session) => {
       if (event == "SIGNED_IN") {
-        console.log("SIGNED_IN", session);
         await fetch("/api/saveSessionCookie", {
           method: "POST",
           headers: new Headers({ "Content-Type": "application/json" }),
@@ -21,7 +20,7 @@ export default function Home() {
           body: JSON.stringify({ event, session }),
         });
       } else if (event == "SIGNED_OUT") {
-        console.log("SIGNED_OUT", session);
+        // add remove cookie
       }
 
       setSession(session);

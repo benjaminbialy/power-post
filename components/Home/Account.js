@@ -7,40 +7,36 @@ import ScrollContainer from "../ScrollContainer";
 
 export default function Account({ session }) {
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState(null);
-  const [website, setWebsite] = useState(null);
-  const [avatar_url, setAvatarUrl] = useState(null);
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    getProfile();
+    getPosts();
   }, [session]);
 
-  async function getProfile() {
+  const getPosts = async () => {
     try {
       setLoading(true);
       const user = supabase.auth.user();
 
       let { data, error, status } = await supabase
-        .from("profiles")
-        .select(`username, website, avatar_url`)
+        .from("posts")
+        .select()
         .eq("user_id", user.id)
-        .single();
+        .limit(10)
+        .order("post_id", { ascending: false });
 
       if (error && status !== 406) {
         throw error;
       }
-
       if (data) {
-        setUsername(data.username);
-        setWebsite(data.website);
-        setAvatarUrl(data.avatar_url);
+        setPosts([...data]);
       }
     } catch (error) {
       alert(error.message);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   async function updateProfile({ username, website, avatar_url }) {
     try {
@@ -79,11 +75,14 @@ export default function Account({ session }) {
         <LinkButton href={"/write"} text={"Write"} />
       </div>
       <ScrollContainer>
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
+        {posts.map((post) => (
+          <Post
+            key={post.post_id}
+            name={post.name}
+            content={post.content}
+            picURL={post.pic_url}
+          />
+        ))}
       </ScrollContainer>
     </div>
   );
