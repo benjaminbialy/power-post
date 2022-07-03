@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../utils/supabaseClient";
 import Button from "../Buttons/Button";
 import LinkButton from "../Buttons/LinkButton";
+import NavBar from "../NavBar";
 import Post from "../Post";
 import ScrollContainer from "../ScrollContainer";
 
@@ -38,32 +39,9 @@ export default function Account({ session }) {
     }
   };
 
-  async function updateProfile({ username, website, avatar_url }) {
-    try {
-      setLoading(true);
-      const user = supabase.auth.user();
-      const updates = {
-        id: user.id,
-        username,
-        website,
-        avatar_url,
-        updated_at: new Date(),
-      };
-      let { error } = await supabase.from("profiles").upsert(updates, {
-        returning: "minimal", // Don't return the value after inserting
-      });
-      if (error) {
-        throw error;
-      }
-    } catch (error) {
-      alert(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
-    <div className="flex flex-col w-screen items-center ">
+    <div className="flex flex-col md:flex-row w-screen items-center ">
+      <NavBar />
       <div className="flex w-full">
         {" "}
         <Button
