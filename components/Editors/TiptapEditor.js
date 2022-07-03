@@ -1,8 +1,12 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
-const TiptapEditor = ({ content }) => {
+const TiptapEditor = ({ content, setContent }) => {
   const editor = useEditor({
+    onUpdate({ editor }) {
+      setContent(editor.getJSON());
+      console.log(editor);
+    },
     extensions: [StarterKit],
     content: content,
   });

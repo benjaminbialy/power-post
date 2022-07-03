@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../components/Buttons/Button";
 import TiptapEditor from "../components/Editors/TiptapEditor";
 import { supabase } from "../utils/supabaseClient.js";
@@ -19,10 +19,23 @@ export async function getServerSideProps({ req }) {
 }
 
 function write({ user }) {
+  const [content, setContent] = useState("This is a test description");
+
   const savePost = async () => {
-    // const { data, error } = await supabase
-    //   .from("posts")
-    //   .insert([{ user_id: user.id, name: "", pic_url: "", content: "" }]);
+    const { data, error } = await supabase.from("posts").insert([
+      {
+        user_id: user.id,
+        name: "Testing Posting",
+        pic_url:
+          "https://i.picsum.photos/id/249/200/200.jpg?hmac=75zqoHvrxGGVnJnS8h0gUzZ3zniIk6PggG38GjmyOto",
+        content: content,
+      },
+    ]);
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(data);
+    }
   };
 
   return (
@@ -36,7 +49,7 @@ function write({ user }) {
       </div>
       <div className="bg-red-50 w-1/2">
         post
-        <TiptapEditor content={"Fake blog post content"} />
+        <TiptapEditor content={content} setContent={setContent} />
         <Button text={"Save"} onClick={() => savePost()} />
       </div>
     </div>
