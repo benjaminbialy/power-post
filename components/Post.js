@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link.js";
 import React from "react";
 import TiptapEditor from "../components/Editors/TiptapEditor.js";
 import Button from "./Buttons/Button.js";
@@ -10,20 +11,29 @@ function Post({
   buttonText = "Queue",
   showButton = false,
   postingDate = "",
+  post_id = 0,
   onClick = () => console.log("Clicked!"),
 }) {
   return (
-    <div className="flex-none bg-red-200 h-3/4 w-96 mx-5 p-4 overflow-y-hidden">
+    <div className="block flex-none bg-red-200 h-3/4 w-96 mx-5 p-4 overflow-y-hidden">
       <div className="flex flex-col">
         <div className="flex justify-between">
           <Image src={picURL} width={40} height={40} />
-          <div className="">{name}</div>
+          <Link href={"/edit/" + post_id}>
+            <a>
+              <div className="">{name}</div>
+            </a>
+          </Link>
           {showButton && <Button onClick={onClick} text={buttonText} />}
         </div>
         {postingDate !== "" && <p>Posting {postingDate}</p>}
       </div>
       <div>
-        <TiptapEditor content={content} editable={false} />
+        <Link href={"/edit/" + post_id}>
+          <a>
+            <TiptapEditor content={content} editable={false} />
+          </a>
+        </Link>
       </div>
     </div>
   );

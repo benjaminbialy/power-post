@@ -2,7 +2,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
 
-const TiptapEditor = ({ content, setContent, editable = true }) => {
+const TiptapEditor = ({ openAI = 0, content, setContent, editable = true }) => {
   const editor = useEditor({
     onUpdate({ editor }) {
       setContent(editor.getJSON());
@@ -15,7 +15,7 @@ const TiptapEditor = ({ content, setContent, editable = true }) => {
 
   useEffect(() => {
     editor?.commands?.setContent(content);
-  }, [content]);
+  }, [openAI]);
 
   if (!editor) {
     return null;

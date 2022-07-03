@@ -6,8 +6,9 @@ import TextInput from "../../components/inputs/TextInput";
 import { supabase } from "../../utils/supabaseClient.js";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
-// used to implement a protected route
+// used to implement a protected route and get the post to edit
 export async function getServerSideProps(context) {
   const { params, req } = context;
 
@@ -33,17 +34,42 @@ export async function getServerSideProps(context) {
   return { props: { user, data } };
 }
 
+const saveChanges = async (post_id, name, content) => {
+  const { data, error } = await supabase
+    .from("posts")
+    .update({ name: name, content: content })
+    .match({ post_id: post_id });
+
+  if (error) throw error;
+};
+
+const deletePost = async (post_id, route) => {
+  if (
+    window.confirm(
+      "Are you sure you want to delete this post? It'll be gone forever!"
+    )
+  ) {
+    const { data, error } = await supabase
+      .from("posts")
+      .delete()
+      .match({ post_id: post_id });
+
+    if (data) {
+      route.push("/");
+    }
+  }
+};
+
 function edit({ user, data = "" }) {
   const [name, setName] = useState(data[0].name);
   const [content, setContent] = useState(data[0].content);
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   const id = useId();
+  const route = useRouter();
+
   return (
     <div className="flex bg-green-200 justify-around">
-      <div className="w-3/5">
+      <div className="w-1/2">
         <label htmlFor={"name-" + id}>Post name:</label>
         <TextInput
           value={name}
@@ -58,7 +84,17 @@ function edit({ user, data = "" }) {
           editable={true}
         />
       </div>
-      <div className="bg-red-50 w-2/12">buttons</div>
+      <div className="bg-red-50 w-1/4 flex flex-col">
+        <Button
+          text="Save"
+          onClick={() => saveChanges(data[0].post_id, name, content)}
+        />{" "}
+        <Button
+          text="Delete"
+          onClick={() => deletePost(data[0].post_id, route)}
+        />
+        <Button text="Home" onClick={() => route.push("/")} />
+      </div>
     </div>
   );
 }

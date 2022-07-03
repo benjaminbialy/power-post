@@ -106,6 +106,7 @@ export default function post({ user }) {
         <ScrollContainer>
           {posts.map((post) => (
             <Post
+              post_id={post.post_id}
               onClick={() => queuePost(post.post_id, user.id)}
               key={"normal-" + post.post_id}
               name={post.name}
@@ -124,6 +125,7 @@ export default function post({ user }) {
             console.log(queuedPost);
             return (
               <Post
+                post_id={queued.post_id}
                 buttonText="Unqueue"
                 onClick={() => unqueuePost(queued.post_id)}
                 key={"queued-" + queued.queue_id}

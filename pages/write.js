@@ -5,6 +5,7 @@ import Select from "../components/Inputs/Select";
 import TextInput from "../components/inputs/TextInput";
 import { supabase } from "../utils/supabaseClient.js";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 // used to implement a protected route
 export async function getServerSideProps({ req }) {
@@ -22,6 +23,7 @@ export async function getServerSideProps({ req }) {
 }
 
 function write({ user, templateSelected = 0 }) {
+  // keep track of request statuses
   const [saving, setSaving] = useState(false);
   const [creating, setCreating] = useState(false);
   const [postTypeID, setPostTypeID] = useState(templateSelected);
@@ -29,6 +31,8 @@ function write({ user, templateSelected = 0 }) {
   const [description, setDescription] = useState("");
   const [keywords, setKeywords] = useState("");
   const [content, setContent] = useState("");
+  // used to tell the editor to include the openAI output
+  const [openAI, setOpenAI] = useState(0);
 
   let options = [
     {
@@ -68,6 +72,7 @@ function write({ user, templateSelected = 0 }) {
   ];
 
   const id = useId();
+  const route = useRouter();
 
   const createPost = async () => {
     setCreating(true);
@@ -85,6 +90,7 @@ function write({ user, templateSelected = 0 }) {
       });
       console.log(res);
       setContent(res.data.result);
+      setOpenAI((prev) => prev + 1);
     } catch (error) {
       alert(error);
     }
@@ -106,6 +112,7 @@ function write({ user, templateSelected = 0 }) {
       console.log(error);
     } else {
       console.log(data);
+      route.push("/post");
     }
     setSaving(false);
   };
@@ -157,7 +164,11 @@ function write({ user, templateSelected = 0 }) {
         />
       </div>
       <div className="bg-red-50 w-1/2">
-        <TiptapEditor content={content} setContent={setContent} />
+        <TiptapEditor
+          openAI={openAI}
+          content={content}
+          setContent={setContent}
+        />
         <Button
           text={saving ? "Saving..." : "Save"}
           onClick={() => savePost()}
