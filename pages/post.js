@@ -29,6 +29,7 @@ export default function post({ user }) {
   const [posts, setPosts] = useState([]);
   const [queuedPosts, setQueuedPosts] = useState([]);
 
+  // fetches post types on load
   useEffect(() => {
     setLoading(true);
     getPosts("posts", setPosts);
@@ -36,6 +37,7 @@ export default function post({ user }) {
     setLoading(false);
   }, [user]);
 
+  // gets the latest 10 posts
   const getPosts = async (table, setType) => {
     try {
       let { data, error, status } = await supabase
@@ -129,6 +131,7 @@ export default function post({ user }) {
                 content={queuedPost.content}
                 picURL={queuedPost.pic_url}
                 showButton={true}
+                postingDate={queued.date_to_post}
               />
             );
           })}
