@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "../components/Buttons/Button";
 import TiptapEditor from "../components/Editors/TiptapEditor";
-import { supabase } from "../utils/supabaseClient";
+import { supabase } from "../utils/supabaseClient.js";
 
 // used to implement a protected route
 export async function getServerSideProps({ req }) {
+  console.log(req);
   const { error, user } = await supabase.auth.api.getUserByCookie(req);
-  console.log(error);
 
   // redirect to login page if not logged in
   if (!user) {
@@ -20,9 +20,9 @@ export async function getServerSideProps({ req }) {
 
 function write({ user }) {
   const savePost = async () => {
-    const { data, error } = await supabase
-      .from("posts")
-      .insert([{ user_id: user.id, name: "", pic_url: "", content: "" }]);
+    // const { data, error } = await supabase
+    //   .from("posts")
+    //   .insert([{ user_id: user.id, name: "", pic_url: "", content: "" }]);
   };
 
   return (

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useId, useState } from "react";
 import NumberInput from "../components/Inputs/NumberInput";
-import LinkButton from "../components/LinkButton";
+import LinkButton from "../components/Buttons/LinkButton";
 import { supabase } from "../utils/supabaseClient";
 
 // used to implement a protected route

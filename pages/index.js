@@ -2,17 +2,34 @@ import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient.js";
 import Auth from "../components/Home/Auth";
 import Account from "../components/Home/Account";
+import axios from "axios";
+import Button from "../components/Buttons/Button.js";
 
 export default function Home() {
   const [session, setSession] = useState(null);
 
-  useEffect(() => {
+  const handleSessionData = () => {
     setSession(supabase.auth.session());
-    console.log(supabase.auth.session());
 
-    supabase.auth.onAuthStateChange((_event, session) => {
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event == "SIGNED_IN") {
+        console.log("SIGNED_IN", session);
+        await fetch("/api/saveSessionCookie", {
+          method: "POST",
+          headers: new Headers({ "Content-Type": "application/json" }),
+          credentials: "same-origin",
+          body: JSON.stringify({ event, session }),
+        });
+      } else if (event == "SIGNED_OUT") {
+        console.log("SIGNED_OUT", session);
+      }
+
       setSession(session);
     });
+  };
+
+  useEffect(() => {
+    handleSessionData();
   }, []);
 
   return (
