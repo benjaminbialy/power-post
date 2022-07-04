@@ -77,7 +77,7 @@ export default function Account({ session }) {
             ))
           ) : (
             <div className="flex-none flex flex-col justify-center text-center items-center w-full h-[230px] p-8  max-w-sm  overflow-y-hidden border-2 border-gray-200 lg:mr-8 lg:mb-0 mb-8">
-              You don't have any posts, create one{" "}
+              You don&apos;t have any posts, create one{" "}
               <Link href={"/write/0"}>
                 <a className="text-sky-400">here.</a>
               </Link>

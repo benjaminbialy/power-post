@@ -100,7 +100,7 @@ export default function Post({ user }) {
               ))
             ) : (
               <div className="flex-none flex flex-col justify-center text-center items-center w-full h-[230px] p-8  max-w-sm  overflow-y-hidden border-2 border-gray-200 mb-4 md:mr-4">
-                You don't have any posts, create one{" "}
+                You don&apos;t have any posts, create one{" "}
                 <Link href={"/write/0"}>
                   <a className="text-sky-400">here.</a>
                 </Link>
@@ -133,7 +133,8 @@ export default function Post({ user }) {
             ) : (
               <div className="flex-none flex flex-col justify-center text-center items-center w-full h-[230px] p-8  max-w-sm  overflow-y-hidden border-2 border-gray-200 ">
                 <div>
-                  You don't have any queued posts, queue a post or create one{" "}
+                  You don&apos;t have any queued posts, queue a post or create
+                  one
                   <Link href={"/write/0"}>
                     <a className="text-sky-400">here.</a>
                   </Link>
