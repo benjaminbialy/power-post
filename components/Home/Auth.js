@@ -42,7 +42,7 @@ export default function Auth() {
               </div>
             </form>
             <div>
-              <Button text={"LinkedIn"} styles={"w-full mt-2"} />
+              <Button text={"LinkedIn"} styles={"w-full mt-6"} />
               {/* <Button text={"Apple"} styles={"w-full mt-2"} /> */}
             </div>
           </div>
