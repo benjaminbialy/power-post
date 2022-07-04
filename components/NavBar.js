@@ -5,7 +5,7 @@ import LinkButton from "./Buttons/LinkButton";
 
 function NavBar() {
   return (
-    <div className=" w-screen px-3 sm:px-6 py-2 flex justify-between md:justify-start border-b-2 md:py-6 md:px-4 md:border-b-0 md:border-r-2 border-gray-200 md:flex-col md:w-28 lg:w-32 md:h-full">
+    <div className=" w-screen px-3 sm:px-6 py-2 flex justify-between md:justify-start border-b-2 md:py-6 md:px-4 md:border-b-0 md:border-r-2 border-gray-200 md:flex-col md:w-28 md:h-full ">
       <div className="w-20 md:w-full hover:cursor-pointer">
         <Link href="/">
           <Image
