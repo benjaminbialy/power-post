@@ -34,10 +34,10 @@ export async function getServerSideProps(context) {
   return { props: { user, data } };
 }
 
-const saveChanges = async (post_id, name, content) => {
+const saveChanges = async (post_id, name, content, pic_url) => {
   const { data, error } = await supabase
     .from("posts")
-    .update({ name: name, content: content })
+    .update({ name: name, content: content, pic_url: pic_url })
     .match({ post_id: post_id });
 
   if (error) throw error;
@@ -63,37 +63,70 @@ const deletePost = async (post_id, route) => {
 function edit({ user, data = "" }) {
   const [name, setName] = useState(data[0].name);
   const [content, setContent] = useState(data[0].content);
+  const [picURL, setPicURL] = useState(data[0].pic_url);
 
   const id = useId();
   const route = useRouter();
 
   return (
-    <div className="flex bg-green-200 justify-around">
-      <div className="w-1/2">
-        <label htmlFor={"name-" + id}>Post name:</label>
-        <TextInput
-          value={name}
-          setValue={setName}
-          id={"name-" + id}
-          placeholder={"Enter the post name"}
+    <div className="flex flex-col sm:flex-row-reverse h-screen">
+      <div className="flex justify-between p-4 border-b-2 border-gray-200 sm:border-b-0 sm:border-l-2 sm:flex-col-reverse sm:justify-end sm:p-10">
+        <Button
+          styles=" sm:mt-auto "
+          text="Delete"
+          onClick={() => deletePost(data[0].post_id, route)}
         />
-        <Image width={500} height={400} src={data[0].pic_url} />
+        <Button styles="sm:mt-6" text="Home" onClick={() => route.push("/")} />
+        <Button
+          text="Save"
+          onClick={() => saveChanges(data[0].post_id, name, content, picURL)}
+          accent={true}
+        />{" "}
+      </div>
+      <div className="p-4 mb-6 sm:p-8 md:py-12 md:16 lg:px-36 flex flex-col overflow-y-scroll  ">
+        <div className="flex mb-4 flex-col  ">
+          <label
+            className="font-medium mb-2 sm:mr-8 text-lg"
+            htmlFor={"name-" + id}
+          >
+            Post name:
+          </label>
+          <TextInput
+            value={name}
+            setValue={setName}
+            id={"name-" + id}
+            placeholder={"Enter the post name"}
+            styles={""}
+          />
+        </div>
+        <div className="mb-5 w-full max-w-md mx-auto">
+          <Image
+            layout="responsive"
+            width={500}
+            height={400}
+            src={data[0].pic_url}
+          />
+        </div>
+        <div className="flex mb-4 flex-col ">
+          <label
+            className="font-medium mb-2 sm:mr-8 text-lg"
+            htmlFor={"name-" + id}
+          >
+            Image URL:
+          </label>
+          <TextInput
+            value={picURL}
+            setValue={setPicURL}
+            id={"name-" + id}
+            placeholder={"Enter the image url from i.picsum.photos"}
+            styles={""}
+          />
+        </div>
         <TiptapEditor
           content={content}
           setContent={setContent}
           editable={true}
         />
-      </div>
-      <div className="bg-red-50 w-1/4 flex flex-col">
-        <Button
-          text="Save"
-          onClick={() => saveChanges(data[0].post_id, name, content)}
-        />{" "}
-        <Button
-          text="Delete"
-          onClick={() => deletePost(data[0].post_id, route)}
-        />
-        <Button text="Home" onClick={() => route.push("/")} />
       </div>
     </div>
   );
