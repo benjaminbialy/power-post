@@ -70,14 +70,6 @@ const deletePost = async (post_id, route) => {
 };
 
 function edit({ user, data = "" }) {
-  const [name, setName] = useState(data[0].name);
-  const [content, setContent] = useState(data[0].content);
-  const [picURL, setPicURL] = useState(data[0].pic_url);
-  const [saving, setSaving] = useState(false);
-
-  const id = useId();
-  const route = useRouter();
-
   return <Edit {...{ user, data, deletePost, saveChanges }} />;
 }
 
