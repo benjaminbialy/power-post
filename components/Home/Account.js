@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../../utils/supabaseClient";
 import Button from "../Buttons/Button";
-import LinkButton from "../Buttons/LinkButton";
 import Heading from "../Heading";
 import NavBar from "../NavBar";
-import Post from "../Post";
+import PostComponent from "../PostComponent";
 import ScrollContainer from "../ScrollContainer";
 import PostTemplate from "./PostTemplate";
 
@@ -66,7 +65,7 @@ export default function Account({ session }) {
         <Heading text={"Post Library"} styles={"my-4 sm:my-6 "} />
         <ScrollContainer>
           {posts.map((post) => (
-            <Post
+            <PostComponent
               key={post.post_id}
               post_id={post.post_id}
               name={post.name}

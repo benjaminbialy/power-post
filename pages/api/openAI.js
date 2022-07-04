@@ -5,7 +5,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export default async function (req, res) {
+const handler = async (req, res) => {
   const {
     prompt,
     temperature,
@@ -28,4 +28,5 @@ export default async function (req, res) {
   res.status(200).json({
     result: completion.data.choices[0].text,
   });
-}
+};
+export default handler;
