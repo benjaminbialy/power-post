@@ -1,12 +1,5 @@
-import React, { useEffect, useId, useState } from "react";
-import Button from "../../components/Buttons/Button";
-import TiptapEditor from "../../components/Editors/TiptapEditor";
-import LinkButton from "../../components/Buttons/LinkButton";
-import TextInput from "../../components/inputs/TextInput";
+import React from "react";
 import { supabase } from "../../utils/supabaseClient.js";
-import axios from "axios";
-import Image from "next/image";
-import { useRouter } from "next/router";
 import Edit from "../../components/Edit/Edit";
 
 // used to implement a protected route and get the post to edit

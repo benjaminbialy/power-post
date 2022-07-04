@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "./Buttons/Button";
 import { supabase } from "../utils/supabaseClient.js";
-import TextInput from "./inputs/TextInput";
+import TextInput from "./Inputs/TextInput";
 
 // sign in/up form with email and password
 function EmailPassword({ isNew }) {

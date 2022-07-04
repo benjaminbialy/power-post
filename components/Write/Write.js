@@ -2,7 +2,7 @@ import React, { useEffect, useId, useState } from "react";
 import Button from "../Buttons/Button";
 import TiptapEditor from "../Editors/TiptapEditor";
 import Select from "../Inputs/Select";
-import TextInput from "../inputs/TextInput";
+import TextInput from "../Inputs/TextInput";
 import { supabase } from "../../utils/supabaseClient.js";
 import axios from "axios";
 import { useRouter } from "next/router";

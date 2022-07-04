@@ -1,8 +1,8 @@
 import React, { useEffect, useId, useState } from "react";
-import Button from "../../components/Buttons/Button";
-import TiptapEditor from "../../components/Editors/TiptapEditor";
-import LinkButton from "../../components/Buttons/LinkButton";
-import TextInput from "../../components/inputs/TextInput";
+import Button from "../Buttons/Button";
+import TiptapEditor from "../Editors/TiptapEditor";
+import LinkButton from "../Buttons/LinkButton";
+import TextInput from "../Inputs/TextInput";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
