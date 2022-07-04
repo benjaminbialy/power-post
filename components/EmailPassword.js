@@ -23,6 +23,12 @@ function EmailPassword({ isNew }) {
       if (error) {
         setError(error);
       }
+
+      if (user) {
+        const { data, error } = await supabase
+          .from("profiles")
+          .insert([{ user_id: user.id, email: email }]);
+      }
     } else {
       const { user, error } = await supabase.auth.signIn({
         email: email,
