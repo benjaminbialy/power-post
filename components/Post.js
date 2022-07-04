@@ -15,10 +15,7 @@ function Post({
   onClick = () => console.log("Clicked!"),
 }) {
   return (
-    <div
-      className="flex-none flex flex-col items-center  w-full h-[230px] p-8 mb-8 overflow-y-hidden border-2 border-gray-200 "
-      // className="block flex-none bg-red-200 h-3/4 w-96 mx-5 p-4 overflow-y-hidden"
-    >
+    <div className="flex-none flex flex-col items-center  w-full h-[230px] p-8  max-w-sm lg:mr-8 lg:mb-0 mb-8 overflow-y-hidden border-2 border-gray-200 ">
       <div className="flex flex-col w-full mb-2">
         <div className="flex justify-between w-full">
           <Image src={picURL} width={40} height={40} />
