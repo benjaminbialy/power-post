@@ -1,32 +1,17 @@
 import React, { useEffect, useId, useState } from "react";
-import Button from "../components/Buttons/Button";
-import TiptapEditor from "../components/Editors/TiptapEditor";
-import Select from "../components/Inputs/Select";
-import TextInput from "../components/inputs/TextInput";
-import { supabase } from "../utils/supabaseClient.js";
+import Button from "../Buttons/Button";
+import TiptapEditor from "../Editors/TiptapEditor";
+import Select from "../Inputs/Select";
+import TextInput from "../inputs/TextInput";
+import { supabase } from "../../utils/supabaseClient.js";
 import axios from "axios";
 import { useRouter } from "next/router";
 
-// used to implement a protected route
-export async function getServerSideProps({ req }) {
-  console.log(req);
-  const { error, user } = await supabase.auth.api.getUserByCookie(req);
-
-  // redirect to login page if not logged in
-  if (!user) {
-    return {
-      redirect: { destination: "/", permanent: false },
-    };
-  }
-
-  return { props: { user } };
-}
-
-function write({ user, templateSelected = 0 }) {
+export default function Write({ user, templateNo }) {
   // keep track of request statuses
   const [saving, setSaving] = useState(false);
   const [creating, setCreating] = useState(false);
-  const [postTypeID, setPostTypeID] = useState(templateSelected);
+  const [postTypeID, setPostTypeID] = useState(templateNo);
   const [topic, setTopic] = useState("");
   const [description, setDescription] = useState("");
   const [keywords, setKeywords] = useState("");
@@ -70,6 +55,13 @@ function write({ user, templateSelected = 0 }) {
       },
     },
   ];
+
+  // check if the template exists, if not show the defualt one.
+  useEffect(() => {
+    if (templateNo >= options.length) {
+      setPostTypeID(0);
+    }
+  }, [templateNo]);
 
   const id = useId();
   const route = useRouter();
@@ -178,5 +170,3 @@ function write({ user, templateSelected = 0 }) {
     </div>
   );
 }
-
-export default write;
