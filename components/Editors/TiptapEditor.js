@@ -2,12 +2,14 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import { useEffect } from "react";
+import BulletList from "@tiptap/extension-bullet-list";
+import ListItem from "@tiptap/extension-list-item";
+import OrderedList from "@tiptap/extension-ordered-list";
 
 const TiptapEditor = ({ openAI = 0, content, setContent, editable = true }) => {
   const editor = useEditor({
     onUpdate({ editor }) {
       setContent(editor.getJSON());
-      console.log(editor);
     },
     editorProps: {
       attributes: {
@@ -15,12 +17,23 @@ const TiptapEditor = ({ openAI = 0, content, setContent, editable = true }) => {
           "w-full px-5 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300",
       },
     },
-
     extensions: [
       StarterKit,
       Placeholder.configure({
         placeholder: "My Custom Placeholder",
       }),
+      BulletList.configure({
+        HTMLAttributes: {
+          class: "list-disc",
+        },
+      }),
+      ,
+      OrderedList.configure({
+        HTMLAttributes: {
+          class: "list-decimal",
+        },
+      }),
+      ListItem,
     ],
 
     content: content,
