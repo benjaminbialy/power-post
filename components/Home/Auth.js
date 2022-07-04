@@ -6,7 +6,7 @@ import { supabase } from "../../utils/supabaseClient";
 export default function Auth() {
   const [isNew, setIsNew] = useState(true);
 
-  // for Google and Apple auth
+  // OAuth
   async function signInWithOAuth(provider) {
     const { user, session, error } = await supabase.auth.signIn({
       provider: provider,
@@ -42,8 +42,8 @@ export default function Auth() {
               </div>
             </form>
             <div>
-              <Button text={"Google"} styles={"w-full mt-2"} />
-              <Button text={"Apple"} styles={"w-full mt-2"} />
+              <Button text={"LinkedIn"} styles={"w-full mt-2"} />
+              {/* <Button text={"Apple"} styles={"w-full mt-2"} /> */}
             </div>
           </div>
         </div>

@@ -6,6 +6,7 @@ import NavBar from "../NavBar";
 import PostComponent from "../PostComponent";
 import ScrollContainer from "../ScrollContainer";
 import PostTemplate from "./PostTemplate";
+import Link from "next/link";
 
 export default function Account({ session }) {
   const [loading, setLoading] = useState(true);
@@ -64,15 +65,24 @@ export default function Account({ session }) {
         </ScrollContainer>
         <Heading text={"Post Library"} styles={"my-4 sm:my-6 "} />
         <ScrollContainer>
-          {posts.map((post) => (
-            <PostComponent
-              key={post.post_id}
-              post_id={post.post_id}
-              name={post.name}
-              content={post.content}
-              picURL={post.pic_url}
-            />
-          ))}
+          {posts.length >= 1 ? (
+            posts.map((post) => (
+              <PostComponent
+                key={post.post_id}
+                post_id={post.post_id}
+                name={post.name}
+                content={post.content}
+                picURL={post.pic_url}
+              />
+            ))
+          ) : (
+            <div className="flex-none flex flex-col justify-center text-center items-center w-full h-[230px] p-8  max-w-sm  overflow-y-hidden border-2 border-gray-200 lg:mr-8 lg:mb-0 mb-8">
+              You don't have any posts, create one{" "}
+              <Link href={"/write/0"}>
+                <a className="text-sky-400">here.</a>
+              </Link>
+            </div>
+          )}
         </ScrollContainer>{" "}
         <Button
           styles="mx-auto mt-4 sm:mt-6"
