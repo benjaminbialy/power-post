@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link.js";
 import React from "react";
-import TiptapEditor from "../components/Editors/TiptapEditor.js";
+import TiptapEditor from "./Editors/TiptapEditor.js";
 import Button from "./Buttons/Button.js";
 
 function Post({
