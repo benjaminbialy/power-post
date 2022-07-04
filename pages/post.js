@@ -4,6 +4,8 @@ import LinkButton from "../components/Buttons/LinkButton";
 import Post from "../components/Post";
 import ScrollContainer from "../components/ScrollContainer";
 import { supabase } from "../utils/supabaseClient.js";
+import NavBar from "../components/NavBar";
+import Heading from "../components/Heading";
 
 // used to implement a protected route
 export async function getServerSideProps({ req }) {
@@ -37,14 +39,13 @@ export default function post({ user }) {
     setLoading(false);
   }, [user]);
 
-  // gets the latest 10 posts
+  // gets all posts
   const getPosts = async (table, setType) => {
     try {
       let { data, error, status } = await supabase
         .from(table)
         .select()
         .eq("user_id", user.id)
-        .limit(10)
         .order("post_id", { ascending: false });
 
       if (error && status !== 406) {
@@ -95,49 +96,49 @@ export default function post({ user }) {
   };
 
   return (
-    <div className="flex flex-col w-screen overflow-hidden p-20 justify-center items-center ">
-      <div className="flex w-full">
-        {" "}
-        <LinkButton href={"/"} text={"Home"} />
-      </div>
-
-      <div>
-        <h2>Posts</h2>{" "}
-        <ScrollContainer>
-          {posts.map((post) => (
-            <Post
-              post_id={post.post_id}
-              onClick={() => queuePost(post.post_id, user.id)}
-              key={"normal-" + post.post_id}
-              name={post.name}
-              content={post.content}
-              picURL={post.pic_url}
-              showButton={true}
-            />
-          ))}
-        </ScrollContainer>
-      </div>
-      <div>
-        <h2>Queued Posts</h2>{" "}
-        <ScrollContainer>
-          {queuedPosts.map((queued) => {
-            let queuedPost = { ...findQueuedPost(posts, queued.post_id) };
-            console.log(queuedPost);
-            return (
+    <div className="flex flex-col md:flex-row items-center md:items-start w-full min-h-screen  ">
+      <NavBar />
+      <div className="p-6 md:py-4 xs:px-8 sm:px-10 flex flex-col justify-start w-full lg:m-0 md:m-auto md:flex-row max-w-[1440px] ">
+        <div className="md:w-2/3">
+          <Heading text={"Post Library"} styles={"mb-4 sm:mb-6"} />
+          <div className="flex flex-wrap">
+            {posts.map((post) => (
               <Post
-                post_id={queued.post_id}
-                buttonText="Unqueue"
-                onClick={() => unqueuePost(queued.post_id)}
-                key={"queued-" + queued.queue_id}
-                name={queuedPost.name}
-                content={queuedPost.content}
-                picURL={queuedPost.pic_url}
+                post_id={post.post_id}
+                onClick={() => queuePost(post.post_id, user.id)}
+                key={"normal-" + post.post_id}
+                name={post.name}
+                content={post.content}
+                picURL={post.pic_url}
                 showButton={true}
-                postingDate={queued.date_to_post}
+                margin={"mb-4 md:mr-4"}
               />
-            );
-          })}
-        </ScrollContainer>
+            ))}
+          </div>
+        </div>
+        <div className="md:w-1/3">
+          <Heading text={"Queued Posts"} styles={"mb-4 sm:mb-6"} />
+          <ScrollContainer styles="h-5/6 items-center">
+            {queuedPosts.map((queued) => {
+              let queuedPost = { ...findQueuedPost(posts, queued.post_id) };
+              console.log(queuedPost);
+              return (
+                <Post
+                  post_id={queued.post_id}
+                  buttonText="Unqueue"
+                  onClick={() => unqueuePost(queued.post_id)}
+                  key={"queued-" + queued.queue_id}
+                  name={queuedPost.name}
+                  content={queuedPost.content}
+                  picURL={queuedPost.pic_url}
+                  showButton={true}
+                  postingDate={queued.date_to_post}
+                  margin={"mb-4"}
+                />
+              );
+            })}
+          </ScrollContainer>
+        </div>
       </div>
     </div>
   );
