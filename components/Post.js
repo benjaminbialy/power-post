@@ -28,7 +28,7 @@ function Post({
         </div>
         {postingDate !== "" && <p>Posting {postingDate}</p>}
       </div>
-      <div>
+      <div className="w-full">
         <Link href={"/edit/" + post_id}>
           <a>
             <TiptapEditor content={content} editable={false} />

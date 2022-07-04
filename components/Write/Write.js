@@ -6,16 +6,20 @@ import TextInput from "../inputs/TextInput";
 import { supabase } from "../../utils/supabaseClient.js";
 import axios from "axios";
 import { useRouter } from "next/router";
+import NavBar from "../NavBar";
+import Heading from "../Heading";
 
 export default function Write({ user, templateNo }) {
   // keep track of request statuses
   const [saving, setSaving] = useState(false);
   const [creating, setCreating] = useState(false);
+
   const [postTypeID, setPostTypeID] = useState(templateNo);
   const [topic, setTopic] = useState("");
   const [description, setDescription] = useState("");
   const [keywords, setKeywords] = useState("");
   const [content, setContent] = useState("");
+
   // used to tell the editor to include the openAI output
   const [openAI, setOpenAI] = useState(0);
 
@@ -94,7 +98,7 @@ export default function Write({ user, templateNo }) {
     const { data, error } = await supabase.from("posts").insert([
       {
         user_id: user.id,
-        name: "Testing Posting",
+        name: topic,
         pic_url:
           "https://i.picsum.photos/id/249/200/200.jpg?hmac=75zqoHvrxGGVnJnS8h0gUzZ3zniIk6PggG38GjmyOto",
         content: content,
@@ -109,63 +113,83 @@ export default function Write({ user, templateNo }) {
     setSaving(false);
   };
 
-  useEffect(() => {
-    console.log(postTypeID);
-  }, [postTypeID]);
-
-  useEffect(() => {
-    console.log(content);
-  }, [content]);
-
   return (
-    <div className="w-screen min-h-screen flex ">
-      <div className="bg-slate-50 w-1/2">
-        <label htmlFor={"type-" + id}>Post type</label>
-        <Select
-          id={"type-" + id}
-          options={options}
-          setValue={setPostTypeID}
-          value={postTypeID}
-        />
-        <label htmlFor={"topic-" + id}>Topic</label>
-        <TextInput
-          placeholder={"Enter a topic to write about"}
-          value={topic}
-          setValue={setTopic}
-          id={"topic-" + id}
-        />
-        <label htmlFor={"desc-" + id}>Description</label>
-        <textarea
-          id={"desc-" + id}
-          className="w-full border border-black rounded p-1"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          onBlur={() => setDescription((prev) => prev.trim())}
-        />{" "}
-        <label htmlFor={"keywords-" + id}>Keywords</label>
-        <TextInput
-          placeholder={"Enter keywords to include"}
-          value={keywords}
-          setValue={setKeywords}
-          id={"keywords-" + id}
-        />
-        <Button
-          loading={creating}
-          text={creating ? "Creating..." : "Create"}
-          onClick={() => createPost()}
-        />
-      </div>
-      <div className="bg-red-50 w-1/2">
-        <TiptapEditor
-          openAI={openAI}
-          content={content}
-          setContent={setContent}
-        />
-        <Button
-          text={saving ? "Saving..." : "Save"}
-          onClick={() => savePost()}
-          loading={saving}
-        />
+    <div className="w-screen min-h-screen flex flex-col md:flex-row">
+      <NavBar />
+      <div className="flex flex-col w-full p-6 md:px-10 md:py-12 lg:flex-row ">
+        <div className="text-lg lg:w-1/2 lg:mr-5">
+          <Heading text={"Post Details"} styles={"mb-3"} />
+          <div className="flex mb-2 items-center">
+            <label className="font-medium mr-8" htmlFor={"type-" + id}>
+              Post type:
+            </label>
+            <Select
+              id={"type-" + id}
+              options={options}
+              setValue={setPostTypeID}
+              value={postTypeID}
+            />
+          </div>
+          <div className="flex mb-4 flex-col sm:flex-row sm:items-center ">
+            <label className="font-medium mb-2 sm:mr-8" htmlFor={"topic-" + id}>
+              Topic:
+            </label>
+            <TextInput
+              placeholder={"Enter a topic to write about"}
+              value={topic}
+              setValue={setTopic}
+              id={"topic-" + id}
+            />
+          </div>
+          <div className="flex mb-4 flex-col sm:flex-row sm:items-center ">
+            <label className="font-medium mb-2 sm:mr-8" htmlFor={"desc-" + id}>
+              Description:
+            </label>
+            <textarea
+              id={"desc-" + id}
+              className="w-full px-5 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+              placeholder="Write a detailed description of what you're wanting"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              onBlur={() => setDescription((prev) => prev.trim())}
+            />
+          </div>
+          <div className="flex mb-4 flex-col sm:flex-row sm:items-center ">
+            <label
+              className="font-medium mb-2 sm:mr-8"
+              htmlFor={"keywords-" + id}
+            >
+              Keywords:
+            </label>
+            <TextInput
+              placeholder={"Enter keywords to include"}
+              value={keywords}
+              setValue={setKeywords}
+              id={"keywords-" + id}
+            />
+          </div>
+          <Button
+            accent={true}
+            loading={creating}
+            text={creating ? "Creating..." : "Create"}
+            onClick={() => createPost()}
+          />
+        </div>
+        <div className="lg:w-1/2 lg:ml-5 mt-5 lg:mt-0 ">
+          <Heading text={"Generated Post"} styles={"mb-3"} />
+          <TiptapEditor
+            openAI={openAI}
+            content={content}
+            setContent={setContent}
+          />
+          <Button
+            text={saving ? "Saving..." : "Save"}
+            onClick={() => savePost()}
+            loading={saving}
+            accent={true}
+            styles={"mt-5"}
+          />
+        </div>
       </div>
     </div>
   );

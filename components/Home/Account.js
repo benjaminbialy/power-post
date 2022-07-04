@@ -75,7 +75,7 @@ export default function Account({ session }) {
           ))}
         </ScrollContainer>{" "}
         <Button
-          style="mx-auto mt-4 sm:mt-6"
+          styles="mx-auto mt-4 sm:mt-6"
           text={"Sign out"}
           onClick={() => supabase.auth.signOut()}
           accent={true}

@@ -71,7 +71,7 @@ function EmailPassword({ isNew }) {
         <Button
           onClick={(e) => handleUserAuth(e)}
           text={"Sign" + (isNew ? " up" : " in")}
-          style={"w-full"}
+          styles={"w-full"}
           accent={true}
           loading={loading}
         />
