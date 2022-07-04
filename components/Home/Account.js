@@ -68,6 +68,7 @@ export default function Account({ session }) {
           {posts.map((post) => (
             <Post
               key={post.post_id}
+              post_id={post.post_id}
               name={post.name}
               content={post.content}
               picURL={post.pic_url}
