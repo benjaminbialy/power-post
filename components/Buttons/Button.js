@@ -5,6 +5,7 @@ function Button({
   accent = false,
   styles = "",
   loading = false,
+  loadingText = "Loading...",
   onClick = () => {
     alert("I was clicked");
   },
@@ -21,7 +22,7 @@ function Button({
       }
       disabled={loading}
     >
-      {loading ? "Loading..." : text}
+      {loading ? loadingText : text}
     </button>
   );
 }

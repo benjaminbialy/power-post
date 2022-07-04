@@ -1,7 +1,7 @@
 import React, { useEffect, useId, useState } from "react";
 import Button from "../../components/Buttons/Button";
 import TiptapEditor from "../../components/Editors/TiptapEditor";
-import Select from "../../components/Inputs/Select";
+import LinkButton from "../../components/Buttons/LinkButton";
 import TextInput from "../../components/inputs/TextInput";
 import { supabase } from "../../utils/supabaseClient.js";
 import axios from "axios";
@@ -34,13 +34,21 @@ export async function getServerSideProps(context) {
   return { props: { user, data } };
 }
 
-const saveChanges = async (post_id, name, content, pic_url) => {
+const saveChanges = async (post_id, name, content, pic_url, setSaving) => {
+  setSaving(true);
   const { data, error } = await supabase
     .from("posts")
     .update({ name: name, content: content, pic_url: pic_url })
     .match({ post_id: post_id });
 
-  if (error) throw error;
+  if (error) {
+    setSaving(false);
+    throw error;
+  }
+  if (data) {
+    setSaving(false);
+    alert("Data saved");
+  }
 };
 
 const deletePost = async (post_id, route) => {
@@ -64,6 +72,7 @@ function edit({ user, data = "" }) {
   const [name, setName] = useState(data[0].name);
   const [content, setContent] = useState(data[0].content);
   const [picURL, setPicURL] = useState(data[0].pic_url);
+  const [saving, setSaving] = useState(false);
 
   const id = useId();
   const route = useRouter();
@@ -76,10 +85,14 @@ function edit({ user, data = "" }) {
           text="Delete"
           onClick={() => deletePost(data[0].post_id, route)}
         />
-        <Button styles="sm:mt-6" text="Home" onClick={() => route.push("/")} />
+        <LinkButton styles="sm:mt-6" text="Home" href={"/"} />
         <Button
+          loading={saving}
           text="Save"
-          onClick={() => saveChanges(data[0].post_id, name, content, picURL)}
+          loadingText={"Saving"}
+          onClick={() =>
+            saveChanges(data[0].post_id, name, content, picURL, setSaving)
+          }
           accent={true}
         />{" "}
       </div>
