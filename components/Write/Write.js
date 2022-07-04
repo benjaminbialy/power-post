@@ -114,7 +114,7 @@ export default function Write({ user, templateNo }) {
   };
 
   return (
-    <div className="w-screen min-h-screen flex flex-col md:flex-row">
+    <div className="flex flex-col md:flex-row items-center md:items-start w-full min-h-screen  ">
       <NavBar />
       <div className="flex flex-col w-full p-6 md:px-10 md:py-12 lg:flex-row ">
         <div className="text-lg lg:w-1/2 lg:mr-5">

@@ -32,12 +32,12 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex justify-center min-h-screen w-screen">
+    <>
       {!session ? (
         <Auth />
       ) : (
         <Account key={session.user.id} session={session} />
       )}
-    </div>
+    </>
   );
 }
