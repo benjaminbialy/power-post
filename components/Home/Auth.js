@@ -6,7 +6,7 @@ import { supabase } from "../../utils/supabaseClient";
 export default function Auth() {
   const [isNew, setIsNew] = useState(true);
 
-  // OAuth
+  // OAuth Providers
   async function signInWithOAuth(provider) {
     const { user, session, error } = await supabase.auth.signIn({
       provider: provider,
@@ -42,8 +42,13 @@ export default function Auth() {
               </div>
             </form>
             <div>
-              <Button text={"LinkedIn"} styles={"w-full mt-6"} />
-              {/* <Button text={"Apple"} styles={"w-full mt-2"} /> */}
+              <Button
+                text={"LinkedIn"}
+                styles={"w-full mt-6"}
+                onClick={() => {
+                  signInWithOAuth("LinkedIn");
+                }}
+              />
             </div>
           </div>
         </div>

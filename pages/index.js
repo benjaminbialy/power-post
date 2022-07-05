@@ -13,7 +13,7 @@ export default function Home() {
 
     supabase.auth.onAuthStateChange(async (event, session) => {
       if (event == "SIGNED_IN") {
-        await fetch("/api/saveSessionCookie", {
+        const status = await fetch("/api/saveSessionCookie", {
           method: "POST",
           headers: new Headers({ "Content-Type": "application/json" }),
           credentials: "same-origin",

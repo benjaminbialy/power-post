@@ -22,6 +22,8 @@ export default function Account({ session }) {
 
   useEffect(() => {
     getPosts();
+    addUser();
+    console.log(session);
   }, [session]);
 
   const getPosts = async () => {
@@ -46,6 +48,29 @@ export default function Account({ session }) {
       alert(error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const addUser = async () => {
+    const user = supabase.auth.user();
+    // check if user exists
+    const { count } = await supabase
+      .from("profiles")
+      .select("user_id", { count: "exact" })
+      .eq("user_id", user.id);
+    // adds user if user_id doesn't exist already
+    if (count < 1) {
+      const { data, error } = await supabase.from("profiles").insert([
+        {
+          user_id: user.id,
+          email: user.email,
+        },
+      ]);
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(data);
+      }
     }
   };
 
