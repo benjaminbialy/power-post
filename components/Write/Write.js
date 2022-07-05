@@ -95,20 +95,26 @@ export default function Write({ user, templateNo }) {
 
   const savePost = async () => {
     setSaving(true);
-    const { data, error } = await supabase.from("posts").insert([
-      {
-        user_id: user.id,
-        name: topic,
-        pic_url:
-          "https://i.picsum.photos/id/249/200/200.jpg?hmac=75zqoHvrxGGVnJnS8h0gUzZ3zniIk6PggG38GjmyOto",
-        content: content,
-      },
-    ]);
-    if (error) {
-      console.log(error);
+    if (topic.trim() === "") {
+      alert("You need to enter a title!");
+    } else if (content === "") {
+      alert("Your post needs to have some content!");
     } else {
-      console.log(data);
-      route.push("/post");
+      const { data, error } = await supabase.from("posts").insert([
+        {
+          user_id: user.id,
+          name: topic,
+          pic_url:
+            "https://i.picsum.photos/id/249/200/200.jpg?hmac=75zqoHvrxGGVnJnS8h0gUzZ3zniIk6PggG38GjmyOto",
+          content: content,
+        },
+      ]);
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(data);
+        route.push("/post");
+      }
     }
     setSaving(false);
   };

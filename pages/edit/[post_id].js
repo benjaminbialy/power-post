@@ -30,19 +30,27 @@ export async function getServerSideProps(context) {
 
 const saveChanges = async (post_id, name, content, pic_url, setSaving) => {
   setSaving(true);
-  const { data, error } = await supabase
-    .from("posts")
-    .update({ name: name, content: content, pic_url: pic_url })
-    .match({ post_id: post_id });
 
-  if (error) {
-    setSaving(false);
-    throw error;
+  if (name.trim() == "") {
+    alert("Your post needs a name!");
+  } else if (content == "") {
+    alert("Your post needs some content!");
+  } else {
+    const { data, error } = await supabase
+      .from("posts")
+      .update({ name: name, content: content, pic_url: pic_url })
+      .match({ post_id: post_id });
+
+    if (error) {
+      setSaving(false);
+      throw error;
+    }
+    if (data) {
+      setSaving(false);
+      alert("Post updated");
+    }
   }
-  if (data) {
-    setSaving(false);
-    alert("Data saved");
-  }
+  setSaving(false);
 };
 
 const deletePost = async (post_id, route) => {
