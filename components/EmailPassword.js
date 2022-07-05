@@ -14,6 +14,7 @@ function EmailPassword({ isNew }) {
     setLoading(true);
     e.preventDefault();
 
+    // user is signing up
     if (isNew) {
       const { user, error } = await supabase.auth.signUp({
         email: email,
