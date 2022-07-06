@@ -13,6 +13,7 @@ function NavBar() {
             height={"60px"}
             width={"60px"}
             layout={"responsive"}
+            priority={true}
           />
         </Link>
       </div>

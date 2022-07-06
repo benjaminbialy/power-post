@@ -24,13 +24,13 @@ const TiptapEditor = ({ openAI = 0, content, setContent, editable = true }) => {
       }),
       BulletList.configure({
         HTMLAttributes: {
-          class: "list-disc",
+          class: "list-disc ml-5 sm:ml-[7.5%]",
         },
       }),
       ,
       OrderedList.configure({
         HTMLAttributes: {
-          class: "list-decimal",
+          class: "list-decimal ml-5 sm:ml-[7.5%]",
         },
       }),
       ListItem,
@@ -108,15 +108,6 @@ const TiptapEditor = ({ openAI = 0, content, setContent, editable = true }) => {
               }
             >
               ordered list
-            </button>
-            <button
-              onClick={() => editor.chain().focus().toggleBlockquote().run()}
-              className={
-                "m-1 p-2 text-white rounded " +
-                (editor.isActive("blockquote") ? "bg-sky-400 " : "bg-black ")
-              }
-            >
-              blockquote
             </button>
             <button
               onClick={() => editor.chain().focus().setHardBreak().run()}

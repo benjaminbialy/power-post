@@ -61,14 +61,14 @@ function Edit({ user, data = "", deletePost, saveChanges }) {
         <div className="flex mb-4 flex-col ">
           <label
             className="font-medium mb-2 sm:mr-8 text-lg"
-            htmlFor={"name-" + id}
+            htmlFor={"image-" + id}
           >
             Image URL:
           </label>
           <TextInput
             value={picURL}
             setValue={setPicURL}
-            id={"name-" + id}
+            id={"image-" + id}
             placeholder={"Enter the image url from i.picsum.photos"}
             styles={""}
           />

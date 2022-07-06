@@ -7,6 +7,7 @@ import { supabase } from "../../utils/supabaseClient.js";
 import axios from "axios";
 import { useRouter } from "next/router";
 import NavBar from "../NavBar";
+import Image from "next/image";
 import Heading from "../Heading";
 
 export default function Write({ user, templateNo }) {
@@ -16,6 +17,7 @@ export default function Write({ user, templateNo }) {
 
   const [postTypeID, setPostTypeID] = useState(templateNo);
   const [topic, setTopic] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [keywords, setKeywords] = useState("");
   const [content, setContent] = useState("");
@@ -95,7 +97,7 @@ export default function Write({ user, templateNo }) {
 
   const savePost = async () => {
     setSaving(true);
-    if (topic.trim() === "") {
+    if (title.trim() === "") {
       alert("You need to enter a title!");
     } else if (content === "") {
       alert("Your post needs to have some content!");
@@ -103,7 +105,7 @@ export default function Write({ user, templateNo }) {
       const { data, error } = await supabase.from("posts").insert([
         {
           user_id: user.id,
-          name: topic,
+          name: title,
           pic_url:
             "https://i.picsum.photos/id/249/200/200.jpg?hmac=75zqoHvrxGGVnJnS8h0gUzZ3zniIk6PggG38GjmyOto",
           content: content,
@@ -183,6 +185,24 @@ export default function Write({ user, templateNo }) {
         </div>
         <div className="lg:w-1/2 lg:ml-5 mt-5 lg:mt-0 ">
           <Heading text={"Generated Post"} styles={"mb-3"} />
+          <div className="flex mb-4 flex-col sm:flex-row sm:items-center ">
+            <TextInput
+              placeholder={"Title"}
+              value={title}
+              setValue={setTitle}
+              id={"title-" + id}
+            />
+          </div>
+          <div className="mb-5 w-full max-w-md mx-auto">
+            <Image
+              layout="responsive"
+              width={500}
+              height={400}
+              src={
+                "https://i.picsum.photos/id/249/200/200.jpg?hmac=75zqoHvrxGGVnJnS8h0gUzZ3zniIk6PggG38GjmyOto"
+              }
+            />
+          </div>
           <TiptapEditor
             openAI={openAI}
             content={content}
