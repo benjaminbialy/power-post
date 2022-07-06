@@ -77,7 +77,7 @@ export default function Account({ session }) {
   return (
     <div className="flex flex-col md:flex-row items-center md:items-start w-full min-h-screen  ">
       <NavBar />
-      <div className="p-6 xs:py-8 xs:px-16 sm:px-24 flex flex-col justify-center lg:m-0 md:m-auto lg:w-11/12 ">
+      <div className="p-6 xs:py-8 xs:px-16 sm:px-24 flex flex-col w-full justify-center lg:m-0 md:m-auto lg:w-11/12 ">
         <Heading text={"Post Templates"} styles={"mb-4 sm:mb-6"} />
         <ScrollContainer>
           {templates.map((template) => (
