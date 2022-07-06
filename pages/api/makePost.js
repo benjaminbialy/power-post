@@ -1,8 +1,10 @@
 import Cors from "cors";
+import fetch from "node-fetch";
+require("dotenv").config();
 
 // Initializing the cors middleware
 const cors = Cors({
-  methods: ["GET", "HEAD", "POST"],
+  methods: ["POST"],
 });
 
 // Helper method to wait for a middleware to execute before continuing
@@ -20,91 +22,61 @@ function runMiddleware(req, res, fn) {
 }
 
 async function handler(req, res) {
-  // Run the middleware
+  // // Run the middleware
   await runMiddleware(req, res, cors);
-
-  const accessToken = req.body.accessToken;
-  const user = req.body.user;
-
   try {
-    const response = await fetch("https://api.linkedin.com/v2/ugcPosts", {
+    //https://docs.microsoft.com/es-mx/linkedin/marketing/integrations/community-management/shares/share-api?view=li-lms-unversioned&tabs=http#post-shares
+    const resData = await fetch("https://api.linkedin.com/v2/shares", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + req.body.accessToken,
+        Authorization: `Bearer ${process.env.LINKEDIN_ACCESS_TOKEN}`,
+        "cache-control": "no-cache",
         "X-Restli-Protocol-Version": "2.0.0",
+        "Content-Type": "application/json",
       },
       body: {
-        author: `urn:li:person:${req.body.user}`,
-        lifecycleState: "PUBLISHED",
-        specificContent: {
-          "com.linkedin.ugc.ShareContent": {
-            shareCommentary: {
-              text: "Hello World! This is my first Share on LinkedIn!",
+        content: {
+          contentEntities: [
+            {
+              entityLocation: "https://www.example.com/content.html",
+              thumbnails: [
+                {
+                  resolvedUrl: "https://www.example.com/image.jpg",
+                },
+              ],
             },
-            shareMediaCategory: "NONE",
-          },
+          ],
+          title: "Test Share with Content",
         },
-        visibility: {
-          "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC",
+        distribution: {
+          linkedInDistributionTarget: {},
+        },
+        owner: "urn:li:person:K6QBlzgAMK",
+        subject: "Test Share Subject",
+        text: {
+          text: "Test Share!",
         },
       },
     });
-
-    if (response.status >= 400) {
-      return res.json(response);
+    if (!resData.ok) {
     }
 
-    return res.status(200).json(response);
+    res.status(resData.status);
+    res.json(resData);
   } catch (error) {
-    return res.status(500).json({
-      error,
-    });
+    res.json(error);
   }
-
-  res.json(response);
 }
+// .then((response) => response.text())
+// .then((result) => res.send(result));
+
+//   const data = await resData.json();
+
+//   res.status(200).json({ data: data });
+
+//   if (resData.status >= 400) {
+//     return res.json(data);
+//   }
+// }
 
 export default handler;
-
-// const handler = async (req, res) => {
-//   const { user, accessToken } = req.body;
-//   try {
-//     const response = await fetch("https://api.linkedin.com/v2/ugcPosts", {
-//       method: "POST",
-//       headers: {
-//         Authorization: `Bearer ${accessToken}`,
-//         "X-Restli-Protocol-Version": "2.0.0",
-//       },
-//       body: {
-//         author: `urn:li:person:${user}`,
-//         lifecycleState: "PUBLISHED",
-//         specificContent: {
-//           "com.linkedin.ugc.ShareContent": {
-//             shareCommentary: {
-//               text: "Hello World! This is my first Share on LinkedIn!",
-//             },
-//             shareMediaCategory: "NONE",
-//           },
-//         },
-//         visibility: {
-//           "com.linkedin.ugc.MemberNetworkVisibility": "CONNECTIONS",
-//         },
-//       },
-//     });
-
-//     if (response.status >= 400) {
-//       return res.status(400).json({
-//         error: "There was an error",
-//         response: response,
-//       });
-//     }
-
-//     return res.status(200).json({ status: "ok" }, response);
-//   } catch (error) {
-//     return res.status(500).json({
-//       error,
-//     });
-//   }
-// };
-
-// export default handler;

@@ -20,7 +20,12 @@ export default function Home() {
           body: JSON.stringify({ event, session }),
         });
       } else if (event == "SIGNED_OUT") {
-        // add remove cookie
+        const status = await fetch("/api/removeSessionCookie", {
+          method: "POST",
+          headers: new Headers({ "Content-Type": "application/json" }),
+          credentials: "same-origin",
+          body: JSON.stringify({ event, session }),
+        });
       }
 
       setSession(session);
