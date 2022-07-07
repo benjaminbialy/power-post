@@ -1,24 +1,26 @@
 import fetch from "node-fetch";
-require("dotenv").config();
 
 async function handler(req, res) {
-  // https://docs.microsoft.com/es-mx/linkedin/marketing/integrations/community-management/shares/posts-api?view=li-lms-2022-06&viewFallbackFrom=li-lms-unversioned&tabs=http
+  // https://docs.microsoft.com/en-us/linkedin/marketing/integrations/community-management/shares/share-api?view=li-lms-unversioned&tabs=http#schema-1
+  // https://docs.microsoft.com/en-us/linkedin/marketing/integrations/community-management/shares/share-api?view=li-lms-unversioned&tabs=http#making-the-most-of-linkedin-shares
+  // https://docs.microsoft.com/en-us/linkedin/marketing/integrations/community-management/shares/share-api?view=li-lms-unversioned&tabs=http#schema-2
+  const { accessToken, userID, content } = JSON.parse(req.body);
 
   const resData = await fetch("https://api.linkedin.com/v2/shares", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${process.env.LINKEDIN_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
       distribution: {
         linkedInDistributionTarget: {},
       },
-      owner: "urn:li:person:K6QBlzgAMK",
-      subject: "Test Share Subject",
+      owner: `urn:li:person:${userID}`,
+      // https://docs.microsoft.com/en-us/linkedin/marketing/integrations/community-management/shares/share-api?view=li-lms-unversioned&tabs=http#schema-1
       text: {
         // max length is 3000 characters
-        text: "Testing sharing!",
+        text: content,
       },
     }),
   });
