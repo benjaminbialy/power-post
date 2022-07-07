@@ -11,25 +11,13 @@ async function handler(req, res) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      content: {
-        contentEntities: [
-          {
-            entityLocation: "https://www.example.com/content.html",
-            thumbnails: [
-              {
-                resolvedUrl: "https://www.example.com/image.jpg",
-              },
-            ],
-          },
-        ],
-        title: "Testing the LinkedIn Shares API",
-      },
       distribution: {
         linkedInDistributionTarget: {},
       },
       owner: "urn:li:person:K6QBlzgAMK",
       subject: "Test Share Subject",
       text: {
+        // max length is 3000 characters
         text: "Testing sharing!",
       },
     }),
