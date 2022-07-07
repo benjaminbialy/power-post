@@ -2,7 +2,8 @@ import fetch from "node-fetch";
 require("dotenv").config();
 
 async function handler(req, res) {
-  //https://docs.microsoft.com/es-mx/linkedin/marketing/integrations/community-management/shares/share-api?view=li-lms-unversioned&tabs=http#post-shares
+  // https://docs.microsoft.com/es-mx/linkedin/marketing/integrations/community-management/shares/posts-api?view=li-lms-2022-06&viewFallbackFrom=li-lms-unversioned&tabs=http
+
   const resData = await fetch("https://api.linkedin.com/v2/shares", {
     method: "POST",
     headers: {

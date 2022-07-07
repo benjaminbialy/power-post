@@ -8,12 +8,9 @@ export default function Auth() {
 
   // OAuth Providers
   async function signInWithOAuth(provider) {
-    const { user, session, error } = await supabase.auth.signIn(
-      {
-        provider: provider,
-      },
-      { scopes: "w_member_social r_emailaddress" }
-    );
+    const { user, session, error } = await supabase.auth.signIn({
+      provider: provider,
+    });
   }
 
   return (
