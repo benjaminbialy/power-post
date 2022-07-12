@@ -91,9 +91,8 @@ export default function Post({ user }) {
                     queuePost(post.post_id, user.id, setQueuedPosts)
                   }
                   key={"normal-" + post.post_id}
-                  name={post.name}
+                  title={post.title}
                   content={post.content}
-                  picURL={post.pic_url}
                   showButton={true}
                   margin={"mb-4 md:mr-4"}
                 />
@@ -121,9 +120,8 @@ export default function Post({ user }) {
                     buttonText="Unqueue"
                     onClick={() => unqueuePost(queued.post_id, setQueuedPosts)}
                     key={"queued-" + queued.queue_id}
-                    name={queuedPost.name}
+                    title={queuedPost.name}
                     content={queuedPost.content}
-                    picURL={queuedPost.pic_url}
                     showButton={true}
                     postingDate={queued.date_to_post}
                     margin={"mb-4"}

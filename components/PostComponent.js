@@ -3,11 +3,11 @@ import Link from "next/link.js";
 import React from "react";
 import TiptapEditor from "./Editors/TiptapEditor.js";
 import Button from "./Buttons/Button.js";
+import TextArea from "./Inputs/TextArea.js";
 
 function Post({
-  name = "Post Name",
+  title = "Post Name",
   content = " ",
-  picURL = "https://i.picsum.photos/id/249/200/200.jpg?hmac=75zqoHvrxGGVnJnS8h0gUzZ3zniIk6PggG38GjmyOto",
   buttonText = "Queue",
   showButton = false,
   postingDate = "",
@@ -23,12 +23,9 @@ function Post({
       }
     >
       <div className="flex flex-col w-full mb-2">
-        <div className="flex justify-between w-full">
-          <Image src={picURL} width={40} height={40} />
+        <div className="flex justify-between w-full items-center">
           <Link href={"/edit/" + post_id}>
-            <a>
-              <div className="">{name}</div>
-            </a>
+            <a className="flex w-full text-lg sm:text-xl">{title}</a>
           </Link>
           {showButton && <Button onClick={onClick} text={buttonText} />}
         </div>
@@ -37,7 +34,7 @@ function Post({
       <div className="w-full">
         <Link href={"/edit/" + post_id}>
           <a>
-            <TiptapEditor openAI={1} content={content} editable={false} />
+            <TextArea value={content} disabled={true} />
           </a>
         </Link>
       </div>

@@ -28,7 +28,7 @@ export async function getServerSideProps(context) {
   return { props: { user, data } };
 }
 
-const saveChanges = async (post_id, name, content, pic_url, setSaving) => {
+const saveChanges = async (post_id, name, content, setSaving) => {
   setSaving(true);
 
   if (name.trim() == "") {
@@ -38,7 +38,7 @@ const saveChanges = async (post_id, name, content, pic_url, setSaving) => {
   } else {
     const { data, error } = await supabase
       .from("posts")
-      .update({ name: name, content: content, pic_url: pic_url })
+      .update({ title: name, content: content })
       .match({ post_id: post_id });
 
     if (error) {

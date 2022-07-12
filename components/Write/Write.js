@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import NavBar from "../NavBar";
 import Image from "next/image";
 import Heading from "../Heading";
+import TextArea from "../Inputs/TextArea";
 
 export default function Write({ user, templateNo }) {
   // keep track of request statuses
@@ -105,9 +106,7 @@ export default function Write({ user, templateNo }) {
       const { data, error } = await supabase.from("posts").insert([
         {
           user_id: user.id,
-          name: title,
-          pic_url:
-            "https://i.picsum.photos/id/249/200/200.jpg?hmac=75zqoHvrxGGVnJnS8h0gUzZ3zniIk6PggG38GjmyOto",
+          title: title,
           content: content,
         },
       ]);
@@ -149,17 +148,18 @@ export default function Write({ user, templateNo }) {
               id={"topic-" + id}
             />
           </div>
-          <div className="flex mb-4 flex-col sm:flex-row sm:items-center ">
-            <label className="font-medium mb-2 sm:mr-8" htmlFor={"desc-" + id}>
+          <div className="flex mb-4 flex-col sm:flex-row sm:items-start ">
+            <label
+              className="font-medium mb-2 sm:mr-8 sm:mt-2"
+              htmlFor={"desc-" + id}
+            >
               Description:
             </label>
-            <textarea
+            <TextArea
               id={"desc-" + id}
-              className="w-full px-5 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
               placeholder="Write a detailed description of what you're wanting"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              onBlur={() => setDescription((prev) => prev.trim())}
+              setValue={setDescription}
             />
           </div>
           <div className="flex mb-4 flex-col sm:flex-row sm:items-center ">
@@ -193,20 +193,11 @@ export default function Write({ user, templateNo }) {
               id={"title-" + id}
             />
           </div>
-          <div className="mb-5 w-full max-w-md mx-auto">
-            <Image
-              layout="responsive"
-              width={500}
-              height={400}
-              src={
-                "https://i.picsum.photos/id/249/200/200.jpg?hmac=75zqoHvrxGGVnJnS8h0gUzZ3zniIk6PggG38GjmyOto"
-              }
-            />
-          </div>
-          <TiptapEditor
-            openAI={openAI}
-            content={content}
-            setContent={setContent}
+          <TextArea
+            id={"content-" + id}
+            placeholder="Write some content or get the AI to do it!"
+            value={content}
+            setValue={setContent}
           />
           <Button
             text={saving ? "Saving..." : "Save"}
