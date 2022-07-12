@@ -23,6 +23,20 @@ function PostOnLinkedIn() {
       });
   };
 
+  const callSupabaseFunction = async () => {
+    const { data, error } = await supabase.rpc("hello_person", {
+      person: "Ben",
+    });
+
+    if (error) {
+      console.log(error);
+    }
+
+    if (data) {
+      console.log(data);
+    }
+  };
+
   return (
     <div className="flex flex-col mt-32">
       <TextInput
@@ -38,6 +52,14 @@ function PostOnLinkedIn() {
         }}
       >
         Post
+      </button>
+      <button
+        className="bg-black text-white mt-2"
+        onClick={() => {
+          callSupabaseFunction();
+        }}
+      >
+        Call Supabase Function
       </button>
     </div>
   );
