@@ -27,8 +27,8 @@ export default function Auth() {
             Sign In
           </h2>
           <p className="text-gray-500 my-6 sm:my-8">
-            Use the LinkedIn account you'd like to post to and we'll post your
-            content for you!
+            Use the LinkedIn account you&apos;d like to post to and we&apos;ll
+            post your content for you!
           </p>
         </div>
         <Button
