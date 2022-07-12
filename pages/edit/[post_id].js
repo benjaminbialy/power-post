@@ -28,7 +28,7 @@ export async function getServerSideProps(context) {
   return { props: { user, data } };
 }
 
-const saveChanges = async (post_id, name, content, setSaving) => {
+const saveChanges = async (post_id, name, content, setSaving, redirect) => {
   setSaving(true);
 
   if (name.trim() == "") {
@@ -48,6 +48,7 @@ const saveChanges = async (post_id, name, content, setSaving) => {
     if (data) {
       setSaving(false);
       alert("Post updated");
+      redirect();
     }
   }
   setSaving(false);

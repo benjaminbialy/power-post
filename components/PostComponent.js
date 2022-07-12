@@ -10,7 +10,7 @@ function Post({
   content = " ",
   buttonText = "Queue",
   showButton = false,
-  postingDate = "",
+  isPosted = false,
   post_id = 0,
   margin = " lg:mr-8 lg:mb-0 mb-8",
   onClick = () => console.log("Clicked!"),
@@ -29,7 +29,7 @@ function Post({
           </Link>
           {showButton && <Button onClick={onClick} text={buttonText} />}
         </div>
-        {postingDate !== "" && <p>Posting {postingDate}</p>}
+        {isPosted ? <p className="font-bold ml-auto mt-2">Posted</p> : ""}
       </div>
       <div className="w-full">
         <Link href={"/edit/" + post_id}>

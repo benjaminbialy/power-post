@@ -1,9 +1,7 @@
-import React, { useEffect, useId, useState } from "react";
+import React, { useId, useState, useEffect } from "react";
 import Button from "../Buttons/Button";
-import TiptapEditor from "../Editors/TiptapEditor";
 import LinkButton from "../Buttons/LinkButton";
 import TextInput from "../Inputs/TextInput";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import TextArea from "../Inputs/TextArea";
 
@@ -14,6 +12,10 @@ function Edit({ user, data = "", deletePost, saveChanges }) {
 
   const id = useId();
   const route = useRouter();
+
+  const redirectToPost = () => {
+    route.push("/post");
+  };
 
   return (
     <div className="flex flex-col sm:flex-row-reverse h-screen w-screen">
@@ -28,7 +30,15 @@ function Edit({ user, data = "", deletePost, saveChanges }) {
           loading={saving}
           text="Save"
           loadingText={"Saving"}
-          onClick={() => saveChanges(data[0].post_id, name, content, setSaving)}
+          onClick={() =>
+            saveChanges(
+              data[0].post_id,
+              name,
+              content,
+              setSaving,
+              redirectToPost
+            )
+          }
           accent={true}
         />{" "}
       </div>
