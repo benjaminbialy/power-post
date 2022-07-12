@@ -1,8 +1,16 @@
 import React from "react";
 
-function TextArea({ id, placeholder, value, setValue, disabled = false }) {
+function TextArea({
+  id,
+  placeholder,
+  value,
+  setValue,
+  disabled = false,
+  rows = 20,
+}) {
   return (
     <textarea
+      rows={rows}
       disabled={disabled}
       id={id}
       className={

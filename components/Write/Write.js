@@ -160,6 +160,7 @@ export default function Write({ user, templateNo }) {
               placeholder="Write a detailed description of what you're wanting"
               value={description}
               setValue={setDescription}
+              rows={""}
             />
           </div>
           <div className="flex mb-4 flex-col sm:flex-row sm:items-center ">
@@ -198,6 +199,7 @@ export default function Write({ user, templateNo }) {
             placeholder="Write some content or get the AI to do it!"
             value={content}
             setValue={setContent}
+            rows={12}
           />
           <Button
             text={saving ? "Saving..." : "Save"}

@@ -93,11 +93,11 @@ export default function Account({ session }) {
           {posts.length >= 1 ? (
             posts.map((post) => (
               <PostComponent
+                isPosted={post.isPosted}
                 key={post.post_id}
                 post_id={post.post_id}
-                name={post.name}
+                title={post.title}
                 content={post.content}
-                picURL={post.pic_url}
               />
             ))
           ) : (
