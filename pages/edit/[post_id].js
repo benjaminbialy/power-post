@@ -28,13 +28,28 @@ export async function getServerSideProps(context) {
   return { props: { user, data } };
 }
 
-const saveChanges = async (post_id, name, content, setSaving, redirect) => {
+const saveChanges = async (
+  post_id,
+  name,
+  content,
+  setSaving,
+  redirect,
+  setStatus
+) => {
   setSaving(true);
 
   if (name.trim() == "") {
-    alert("Your post needs a name!");
+    setStatus({
+      message: "Couldn't save your post, it needs a name!",
+      success: false,
+      show: true,
+    });
   } else if (content == "") {
-    alert("Your post needs some content!");
+    setStatus({
+      message: "Couldn't save your post, it needs some content!",
+      success: false,
+      show: true,
+    });
   } else {
     const { data, error } = await supabase
       .from("posts")
@@ -43,31 +58,46 @@ const saveChanges = async (post_id, name, content, setSaving, redirect) => {
 
     if (error) {
       setSaving(false);
-      throw error;
+      setStatus({
+        message: "Error saving your post, try again!",
+        success: false,
+        show: true,
+      });
+      console.log(error);
     }
     if (data) {
       setSaving(false);
-      alert("Post updated");
+      setStatus({
+        message: "Post saved successfully, redirecting now!",
+        success: true,
+        show: true,
+      });
       redirect();
     }
   }
   setSaving(false);
 };
 
-const deletePost = async (post_id, route) => {
-  if (
-    window.confirm(
-      "Are you sure you want to delete this post? It'll be gone forever!"
-    )
-  ) {
-    const { data, error } = await supabase
-      .from("posts")
-      .delete()
-      .match({ post_id: post_id });
+const deletePost = async (post_id, route, setStatus) => {
+  const { data, error } = await supabase
+    .from("posts")
+    .delete()
+    .match({ post_id: post_id });
 
-    if (data) {
-      route.push("/");
-    }
+  if (error) {
+    console.log(error);
+    setStatus({
+      message: "We couldn't delete your post!",
+      success: false,
+      show: true,
+    });
+  } else {
+    setStatus({
+      message: "Deleted successfully, redirecting now!",
+      success: true,
+      show: true,
+    });
+    route.push("/post");
   }
 };
 

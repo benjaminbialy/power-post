@@ -4,28 +4,74 @@ import LinkButton from "../Buttons/LinkButton";
 import TextInput from "../Inputs/TextInput";
 import { useRouter } from "next/router";
 import TextArea from "../Inputs/TextArea";
+import Status from "../Popups/Status";
+import ConfirmationBox from "../Popups/ConfirmationBox";
 
 function Edit({ user, data = "", deletePost, saveChanges }) {
   const [name, setName] = useState(data[0].title);
   const [content, setContent] = useState(data[0].content);
   const [saving, setSaving] = useState(false);
 
+  // used for popups
+  const [status, setStatus] = useState({});
+  const [confirm, setConfirm] = useState({});
+
   const id = useId();
   const route = useRouter();
+
+  useEffect(() => {
+    if (status.show) {
+      const timer = setTimeout(() => {
+        setStatus({ show: false });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
+
+  useEffect(() => {
+    if (confirm.confirm) {
+      deletePost(confirm.post_id, route, setStatus);
+    }
+  }, [confirm]);
 
   const redirectToPost = () => {
     route.push("/post");
   };
 
   return (
-    <div className="flex flex-col sm:flex-row-reverse h-screen w-screen">
+    <div className="flex flex-col sm:flex-row-reverse h-screen w-screen ">
+      {status.show ? (
+        <Status
+          setStatus={setStatus}
+          text={status.message}
+          success={status.success}
+          styles={"top-6 sm:left-[20%] md:left-[25%] lg:left-[30%]"}
+        />
+      ) : (
+        confirm.show && (
+          <ConfirmationBox
+            text={
+              "Are you sure you want to delete this post? You'll never get it back!"
+            }
+            setConfirm={setConfirm}
+            styles={"top-6 sm:left-[20%] md:left-[25%] lg:left-[30%]"}
+          />
+        )
+      )}
       <div className="flex justify-between p-4 border-b-2 border-gray-200 sm:border-b-0 sm:border-l-2 sm:flex-col-reverse sm:justify-end sm:p-10">
         <Button
           styles=" sm:mt-auto "
           text="Delete"
-          onClick={() => deletePost(data[0].post_id, route)}
+          onClick={() =>
+            setConfirm((prev) => ({
+              ...prev,
+              show: true,
+              confirm: false,
+              post_id: data[0].post_id,
+            }))
+          }
         />
-        <LinkButton styles="sm:mt-6" text="Home" href={"/"} />
+        <LinkButton styles="sm:mt-6" text="Back" href={"/post"} />
         <Button
           loading={saving}
           text="Save"
@@ -36,7 +82,8 @@ function Edit({ user, data = "", deletePost, saveChanges }) {
               name,
               content,
               setSaving,
-              redirectToPost
+              redirectToPost,
+              setStatus
             )
           }
           accent={true}

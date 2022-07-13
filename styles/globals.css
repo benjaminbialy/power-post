@@ -14,6 +14,10 @@ html {
   animation: fadeOut 1s ease-out 4.1s;
 }
 
+.fade-in-fast {
+  animation: fadeIn 0.25s ease-out;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
