@@ -137,6 +137,14 @@ export default function Write({ user, templateNo }) {
   return (
     <div className="flex flex-col md:flex-row items-center md:items-start w-full min-h-screen  ">
       <NavBar />
+      {status.show && (
+        <Status
+          setStatus={setStatus}
+          text={status.message}
+          success={status.success}
+          styles={"top-6 md:left-[35%] "}
+        />
+      )}
       <div className="flex flex-col w-full p-6 md:px-10 md:py-12 lg:flex-row ">
         <div className="text-lg lg:w-1/2 lg:mr-5">
           <Heading text={"Post Details"} styles={"mb-3"} />
@@ -199,14 +207,6 @@ export default function Write({ user, templateNo }) {
           />
         </div>
         <div className="lg:w-1/2 lg:ml-5 mt-5 lg:mt-0 ">
-          {status.show && (
-            <Status
-              setStatus={setStatus}
-              text={status.message}
-              success={status.success}
-              styles={" left-[4%] top-6 xs:left-auto  md:left-[35%] "}
-            />
-          )}
           <Heading text={"Generated Post"} styles={"mb-3"} />
           <div className="flex mb-4 flex-col sm:flex-row sm:items-center ">
             <TextInput
