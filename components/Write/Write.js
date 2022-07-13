@@ -59,6 +59,10 @@ export default function Write({ user, templateNo }) {
         presence_penalty: 0.0,
       },
     },
+    {
+      id: 2,
+      type: "Dot Points",
+    },
   ];
 
   // check if the template exists, if not show the defualt one.
@@ -74,20 +78,29 @@ export default function Write({ user, templateNo }) {
   const createPost = async () => {
     setCreating(true);
 
-    const config = { ...options[postTypeID].config };
-    try {
-      const res = await axios.post("/api/openAI", {
-        prompt: config.prompt,
-        temperature: config.temperature,
-        max_tokens: config.max_tokens,
-        top_p: config.top_p,
-        frequency_penalty: config.frequency_penalty,
-        presence_penalty: config.presence_penalty,
+    console.log(postTypeID);
+
+    if (postTypeID == 2) {
+      const response = await axios.post("/api/createDotPoints", {
+        prompt: topic,
       });
-      console.log(res);
-      setContent(res.data.result);
-    } catch (error) {
-      alert(error);
+      setContent(response.data.result);
+    } else {
+      const config = { ...options[postTypeID].config };
+      try {
+        const res = await axios.post("/api/openAI", {
+          prompt: config.prompt,
+          temperature: config.temperature,
+          max_tokens: config.max_tokens,
+          top_p: config.top_p,
+          frequency_penalty: config.frequency_penalty,
+          presence_penalty: config.presence_penalty,
+        });
+        console.log(res);
+        setContent(res.data.result);
+      } catch (error) {
+        alert(error);
+      }
     }
     setCreating(false);
   };

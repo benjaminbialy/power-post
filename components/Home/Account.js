@@ -15,7 +15,7 @@ export default function Account({ session }) {
   const templates = [
     { id: 0, text: "Post Idea" },
     { id: 1, text: "Summarize" },
-    { id: 2, text: "Celebrate" },
+    { id: 2, text: "Dot Points" },
     { id: 3, text: "Advertise" },
     { id: 4, text: "Notes" },
   ];
