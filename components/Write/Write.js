@@ -1,6 +1,6 @@
 import React, { useEffect, useId, useState } from "react";
 import Button from "../Buttons/Button";
-import TiptapEditor from "../Editors/TiptapEditor";
+import Status from "../Popups/Status";
 import Select from "../Inputs/Select";
 import TextInput from "../Inputs/TextInput";
 import { supabase } from "../../utils/supabaseClient.js";
@@ -22,9 +22,7 @@ export default function Write({ user, templateNo }) {
   const [description, setDescription] = useState("");
   const [keywords, setKeywords] = useState("");
   const [content, setContent] = useState("");
-
-  // used to tell the editor to include the openAI output
-  const [openAI, setOpenAI] = useState(0);
+  const [status, setStatus] = useState({});
 
   let options = [
     {
@@ -77,7 +75,6 @@ export default function Write({ user, templateNo }) {
     setCreating(true);
 
     const config = { ...options[postTypeID].config };
-    console.log(config);
     try {
       const res = await axios.post("/api/openAI", {
         prompt: config.prompt,
@@ -89,7 +86,6 @@ export default function Write({ user, templateNo }) {
       });
       console.log(res);
       setContent(res.data.result);
-      setOpenAI((prev) => prev + 1);
     } catch (error) {
       alert(error);
     }
@@ -111,14 +107,32 @@ export default function Write({ user, templateNo }) {
         },
       ]);
       if (error) {
+        setStatus({
+          message: "Error saving, try again!",
+          success: false,
+          show: true,
+        });
         console.log(error);
       } else {
-        console.log(data);
+        setStatus({
+          message: "Saved post successfully, redirecting now!",
+          success: true,
+          show: true,
+        });
         route.push("/post");
       }
     }
     setSaving(false);
   };
+
+  useEffect(() => {
+    if (status.show) {
+      const timer = setTimeout(() => {
+        setStatus({ show: false });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
 
   return (
     <div className="flex flex-col md:flex-row items-center md:items-start w-full min-h-screen  ">
@@ -185,6 +199,14 @@ export default function Write({ user, templateNo }) {
           />
         </div>
         <div className="lg:w-1/2 lg:ml-5 mt-5 lg:mt-0 ">
+          {status.show && (
+            <Status
+              setStatus={setStatus}
+              text={status.message}
+              success={status.success}
+              styles={" left-[4%] top-6 xs:left-auto  md:left-[35%] "}
+            />
+          )}
           <Heading text={"Generated Post"} styles={"mb-3"} />
           <div className="flex mb-4 flex-col sm:flex-row sm:items-center ">
             <TextInput
