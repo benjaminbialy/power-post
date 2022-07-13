@@ -5,3 +5,29 @@
 html {
   max-width: 100vw;
 }
+
+.fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+.fade-out {
+  animation: fadeOut 1s ease-out 4.1s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

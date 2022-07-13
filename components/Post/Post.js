@@ -4,9 +4,22 @@ import NavBar from "../NavBar";
 import Heading from "../Heading";
 import { supabase } from "../../utils/supabaseClient";
 import Link from "next/link";
+import Status from "../Popups/Status";
+import ConfirmationBox from "../Popups/ConfirmationBox";
 
 export default function Post({ user }) {
   const [posts, setPosts] = useState([]);
+  const [status, setStatus] = useState({});
+  const [confirm, setConfirm] = useState({});
+
+  useEffect(() => {
+    if (status.show) {
+      const timer = setTimeout(() => {
+        setStatus({ show: false });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
 
   // fetches posts on load
   useEffect(() => {
@@ -41,6 +54,8 @@ export default function Post({ user }) {
 
     if (error) {
       console.log(error);
+    } else {
+      console.log(data);
     }
   };
 
@@ -55,28 +70,64 @@ export default function Post({ user }) {
       }),
     })
       .then((res) => {
-        alert("Posted successfully!");
-        console.log(res);
+        setConfirm({ show: false, confirm: false });
+        setStatus({
+          message: "Posted successfully!",
+          success: true,
+          show: true,
+        });
         updateIsPosted(post_id);
       })
       .catch((error) => {
         console.log(error);
+        setConfirm({ show: false, confirm: false });
+        setStatus({
+          message: "Posting was unsuccessful!",
+          success: false,
+          show: true,
+        });
       });
   };
+
+  useEffect(() => {
+    if (confirm.confirm) {
+      postToLinkedIn(confirm.title, confirm.content, confirm.post_id);
+    }
+  }, [confirm]);
 
   return (
     <div className="flex flex-col md:flex-row items-center md:items-start w-full min-h-screen  ">
       <NavBar />
       <div className="p-6 md:py-4 xs:px-8 sm:px-10 min-h-screen flex flex-col justify-start w-full lg:m-0 md:m-auto  max-w-[1440px] ">
+        {status.show ? (
+          <Status
+            setStatus={setStatus}
+            text={status.message}
+            success={status.success}
+          />
+        ) : (
+          confirm.show && (
+            <ConfirmationBox
+              text={"Are you sure you want to post this to your feed?"}
+              setConfirm={setConfirm}
+            />
+          )
+        )}
         <Heading text={"Post Library"} styles={"mb-4 sm:mb-6"} />
         <div className="flex flex-wrap">
           {posts.length >= 1 ? (
             posts.map((post) => (
               <PostComponent
                 post_id={post.post_id}
-                onClick={() =>
-                  postToLinkedIn(post.title, post.content, post.post_id)
-                }
+                onClick={() => {
+                  setConfirm((prev) => ({
+                    ...prev,
+                    show: true,
+                    title: post.title,
+                    content: post.content,
+                    post_id: post.post_id,
+                  }));
+                }}
                 buttonText={"Post"}
                 key={"normal-" + post.post_id}
                 title={post.title}

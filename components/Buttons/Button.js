@@ -14,7 +14,7 @@ function Button({
     <button
       onClick={onClick}
       className={
-        " px-5 py-4 text-base font-medium text-center transition duration-500 ease-in-out transform  lg:px-10 rounded-xl  focus:outline-none focus:ring-2 focus:ring-offset-2  " +
+        " px-5 py-4 text-base font-medium text-center transition duration-500 ease-in-out transform lg:px-10 rounded-xl  focus:outline-none focus:ring-2 focus:ring-offset-2  " +
         styles +
         (accent
           ? "  focus:ring-sky-400 hover:bg-sky-600 bg-sky-400 text-white"
