@@ -63,8 +63,6 @@ export default async function (req, res) {
     section_list.forEach(async (entry) => {
       final_output += "\n" + entry;
 
-      let final_prompt = title + "\n" + entry;
-
       const response = await openai.createCompletion({
         model: "text-davinci-002",
         prompt: `${final_output}`,
@@ -99,7 +97,16 @@ export default async function (req, res) {
 
   const final_output = response.data["choices"][0]["text"];
 
+  const content = await openai.createCompletion({
+    model: "text-davinci-002",
+    prompt: `Brainstorm ideas combining linkedin post and each point of the following: ${final_output}`,
+    temperature: 0.5,
+    max_tokens: 500,
+  });
+
+  const linkedInPost = content.data["choices"][0]["text"];
+
   res.status(200).json({
-    result: final_output,
+    result: linkedInPost,
   });
 }

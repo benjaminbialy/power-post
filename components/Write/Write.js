@@ -78,13 +78,17 @@ export default function Write({ user, templateNo }) {
   const createPost = async () => {
     setCreating(true);
 
-    console.log(postTypeID);
-
     if (postTypeID == 2) {
-      const response = await axios.post("/api/createDotPoints", {
-        prompt: topic,
-      });
-      setContent(response.data.result);
+      try {
+        const response = await axios.post("/api/dotPointPost", {
+          prompt: topic,
+        });
+        console.log(response);
+        setContent(response.data.result);
+        // setContent(response.data.content);
+      } catch {
+        alert(error);
+      }
     } else {
       const config = { ...options[postTypeID].config };
       try {
