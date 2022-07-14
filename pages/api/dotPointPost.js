@@ -99,7 +99,7 @@ export default async function (req, res) {
 
   const content = await openai.createCompletion({
     model: "text-davinci-002",
-    prompt: `Brainstorm ideas combining linkedin post and each point of the following: ${final_output}`,
+    prompt: `Write two paragraphs for each number: ${final_output}`,
     temperature: 0.5,
     max_tokens: 500,
   });
