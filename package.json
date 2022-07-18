@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@octokit/core": "^4.0.4",
     "@supabase/supabase-js": "^1.35.4",
     "@tiptap/extension-bullet-list": "^2.0.0-beta.29",
     "@tiptap/extension-list-item": "^2.0.0-beta.23",
