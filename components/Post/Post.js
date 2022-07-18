@@ -65,7 +65,7 @@ export default function Post({ user }) {
       auth: process.env.GITHUB_ACCESS_TOKEN,
     });
 
-    await octokit.request("POST /repos/benjaminbialy/power-post/dispatches", {
+    await octokit.request("POST /repos/{owner}/{repo}/dispatches", {
       owner: "benjaminbialy",
       repo: "power-post",
       event_type: "queuePost",
