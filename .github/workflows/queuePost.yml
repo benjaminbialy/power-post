@@ -1,7 +1,7 @@
 on:
   repository_dispatch:
-  schedule:
-    - cron: ${{ github.event.client_payload.cron }}
+    schedule:
+      - cron: ${{ github.event.client_payload.cron }}
 jobs:
   cron:
     runs-on: ubuntu-latest
