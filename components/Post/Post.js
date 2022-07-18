@@ -6,6 +6,7 @@ import { supabase } from "../../utils/supabaseClient";
 import Link from "next/link";
 import Status from "../Popups/Status";
 import ConfirmationBox from "../Popups/ConfirmationBox";
+import { Octokit } from "@octokit/core";
 
 export default function Post({ user }) {
   const [posts, setPosts] = useState([]);
@@ -60,33 +61,49 @@ export default function Post({ user }) {
   };
 
   const postToLinkedIn = async (title, content, post_id) => {
-    fetch("/api/makePost", {
-      method: "POST",
-      credentials: "same-origin",
-      body: JSON.stringify({
+    const octokit = new Octokit({
+      auth: process.env.GITHUB_ACCESS_TOKEN,
+    });
+
+    await octokit.request("POST /repos/benjaminbialy/power-post/dispatches", {
+      owner: "benjaminbialy",
+      repo: "power-post",
+      event_type: "queuePost",
+      client_payload: {
+        cron: "* * * * *",
         content: title + "\n\n" + content,
         userID: supabase.auth.session().user.user_metadata.provider_id,
         accessToken: supabase.auth.session().provider_token,
-      }),
-    })
-      .then((res) => {
-        setConfirm({ show: false, confirm: false });
-        setStatus({
-          message: "Posted successfully!",
-          success: true,
-          show: true,
-        });
-        updateIsPosted(post_id);
-      })
-      .catch((error) => {
-        console.log(error);
-        setConfirm({ show: false, confirm: false });
-        setStatus({
-          message: "Posting was unsuccessful!",
-          success: false,
-          show: true,
-        });
-      });
+      },
+    });
+
+    // fetch("/api/makePost", {
+    //   method: "POST",
+    //   credentials: "same-origin",
+    //   body: JSON.stringify({
+    //     content: title + "\n\n" + content,
+    //     userID: supabase.auth.session().user.user_metadata.provider_id,
+    //     accessToken: supabase.auth.session().provider_token,
+    //   }),
+    // })
+    //   .then((res) => {
+    //     setConfirm({ show: false, confirm: false });
+    //     setStatus({
+    //       message: "Posted successfully!",
+    //       success: true,
+    //       show: true,
+    //     });
+    //     updateIsPosted(post_id);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     setConfirm({ show: false, confirm: false });
+    //     setStatus({
+    //       message: "Posting was unsuccessful!",
+    //       success: false,
+    //       show: true,
+    //     });
+    //   });
   };
 
   useEffect(() => {
